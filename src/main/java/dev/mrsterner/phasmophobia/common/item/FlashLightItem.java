@@ -14,13 +14,11 @@ import net.minecraft.world.World;
 
 
 public class FlashLightItem extends Item implements Light {
-    private int i = 0;
     public FlashLightItem(Settings settings) {
     super(settings);
     }
     @Override
     public void inventoryTick(ItemStack itemStack, World world, Entity entity, int itemSlot, boolean isSelected) {
-        i++;
         if (!(entity instanceof PlayerEntity)) {
             return;
         }
