@@ -1,0 +1,7 @@
+{
+  "defaults": {
+    "textures": {
+      "all": "phasmophobia:block/empty"
+    }
+  }
+}

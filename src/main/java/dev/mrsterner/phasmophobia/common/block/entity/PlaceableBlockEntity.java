@@ -1,6 +1,7 @@
-package dev.mrsterner.phasmophobia.common.block;
+package dev.mrsterner.phasmophobia.common.block.entity;
 
 import dev.mrsterner.phasmophobia.common.registry.PhasmoObjects;
+import dev.mrsterner.phasmophobia.common.registry.PhasmoTags;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -128,7 +129,7 @@ public class PlaceableBlockEntity extends BlockEntity implements BlockEntityClie
 
     public static void handleGUILessInventory(ItemStack stack, PlayerEntity player, Hand hand, DefaultedList<ItemStack> inventory, int itemSlot){
         if(player.isSneaking() && Hand.MAIN_HAND.equals(hand)){
-            if(player.getMainHandStack().isOf(stack.getItem()) && inventory.get(itemSlot).isEmpty()){
+            if(player.getMainHandStack().isOf(stack.getItem()) && inventory.get(itemSlot).isEmpty() && PhasmoTags.PLACEABLES.contains(stack.getItem())){
                 inventory.set(itemSlot, stack.split(1));
             }else if(inventory.get(itemSlot).getItem() != Items.AIR && player.getStackInHand(hand).isEmpty()){
                 player.setStackInHand(hand, inventory.get(itemSlot).copy());

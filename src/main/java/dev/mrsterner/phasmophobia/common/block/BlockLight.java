@@ -1,6 +1,6 @@
 package dev.mrsterner.phasmophobia.common.block;
 
-import com.google.common.base.Ticker;
+import dev.mrsterner.phasmophobia.common.block.entity.BlockLightEntity;
 import dev.mrsterner.phasmophobia.common.registry.PhasmoObjects;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;

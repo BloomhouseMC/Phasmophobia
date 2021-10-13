@@ -1,7 +1,7 @@
 package dev.mrsterner.phasmophobia;
 
 import dev.mrsterner.phasmophobia.common.block.PlaceableBlock;
-import dev.mrsterner.phasmophobia.common.block.PlaceableBlockEntity;
+import dev.mrsterner.phasmophobia.common.block.entity.PlaceableBlockEntity;
 import dev.mrsterner.phasmophobia.common.registry.PhasmoObjects;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
@@ -15,12 +15,10 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import net.fabricmc.api.ModInitializer;
 
-import static dev.mrsterner.phasmophobia.common.block.PlaceableBlockEntity.handleGUILessInventory;
+import static dev.mrsterner.phasmophobia.common.block.entity.PlaceableBlockEntity.handleGUILessInventory;
 
 public class Phasmophobia implements ModInitializer
 {

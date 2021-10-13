@@ -2,9 +2,9 @@ package dev.mrsterner.phasmophobia.common.registry;
 
 import dev.mrsterner.phasmophobia.Phasmophobia;
 import dev.mrsterner.phasmophobia.common.block.BlockLight;
-import dev.mrsterner.phasmophobia.common.block.BlockLightEntity;
+import dev.mrsterner.phasmophobia.common.block.entity.BlockLightEntity;
 import dev.mrsterner.phasmophobia.common.block.PlaceableBlock;
-import dev.mrsterner.phasmophobia.common.block.PlaceableBlockEntity;
+import dev.mrsterner.phasmophobia.common.block.entity.PlaceableBlockEntity;
 import dev.mrsterner.phasmophobia.common.item.CrusifixItem;
 import dev.mrsterner.phasmophobia.common.item.FlashLightItem;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -15,7 +15,6 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 

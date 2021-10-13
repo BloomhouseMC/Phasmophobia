@@ -1,8 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "phasmophobia:items/crusifix",
-		"particle": "phasmophobia:items/crusifix"
+    "0": "phasmophobia:item/crusifix",
+    "particle": "phasmophobia:item/crusifix"
 	},
 	"elements": [
 		{
@@ -109,7 +109,7 @@
 			"translation": [0, 3.75, 0]
 		},
 		"ground": {
-			"translation": [0, 5.5, 1.25]
+			"translation": [0.5, 5.5, 1.5]
 		},
 		"gui": {
 			"rotation": [35, 135, 0],

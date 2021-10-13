@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=south": {
+      "model": "phasmophobia:block/empty"
+    },
+    "facing=west": {
+      "model": "phasmophobia:block/empty",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "phasmophobia:block/empty",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "phasmophobia:block/empty",
+      "y": 270
+    }
+  }
+}

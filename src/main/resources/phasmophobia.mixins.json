@@ -3,7 +3,9 @@
   "minVersion": "0.8",
   "package": "dev.mrsterner.phasmophobia.mixin",
   "compatibilityLevel": "JAVA_16",
-  "mixins": [],
+  "mixins": [
+    "ServerPlayerInteractionManagerMixin"
+  ],
   "server": [],
   "client": [],
   "injectors": {

@@ -1,5 +1,6 @@
 package dev.mrsterner.phasmophobia.common.block;
 
+import dev.mrsterner.phasmophobia.common.block.entity.PlaceableBlockEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;

@@ -1,4 +1,4 @@
-package dev.mrsterner.phasmophobia.common.block;
+package dev.mrsterner.phasmophobia.common.block.entity;
 
 import dev.mrsterner.phasmophobia.common.registry.PhasmoObjects;
 import net.minecraft.block.BlockState;

@@ -1,8 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "phasmophobia:items/flashlight",
-		"particle": "phasmophobia:items/flashlight"
+		"0": "phasmophobia:item/flashlight",
+		"particle": "phasmophobia:item/flashlight"
 	},
 	"elements": [
 		{

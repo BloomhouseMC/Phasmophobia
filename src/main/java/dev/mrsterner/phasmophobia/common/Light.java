@@ -23,12 +23,6 @@ import net.minecraft.world.World;
 public interface Light {
     default TypedActionResult<ItemStack> toggleLight(PlayerEntity playerIn, Hand handIn) {
         ItemStack itemStack = playerIn.getStackInHand(handIn);
-        if (!itemStack.hasNbt()) {
-            itemStack.getOrCreateNbt();
-            NbtCompound tag = new NbtCompound();
-            tag.putInt("on", 1);
-            itemStack.setNbt(tag);
-        }
         if (itemStack.getNbt().getInt("on") == 1) {
             NbtCompound tag = new NbtCompound();
             tag.putInt("on", 0);
@@ -65,20 +59,18 @@ public interface Light {
     default void createLight(ItemStack itemStack, World world, PlayerEntity player) {
         if (!world.isClient) {
             if (itemStack.getNbt().getInt("on") == 1) return;
-            HitResult lookPos = getRayTraceTarget(player, world, 30, false, false);
+            HitResult lookPos = getRayTraceTarget(player, world, 25, false, false);
             BlockPos pos;
             switch (lookPos.getType()) {
                 case MISS -> {return;}
                 case BLOCK -> {
                     BlockHitResult blockHit = (BlockHitResult) lookPos;
                     pos = blockHit.getBlockPos().add(((BlockHitResult) lookPos).getSide().getVector());
-                    System.out.println("BlockPos: "+pos);
                 }
                 case ENTITY -> {
                     EntityHitResult entityHit = (EntityHitResult) lookPos;
                     Entity entity = entityHit.getEntity();
                     pos = entity.getBlockPos();
-                    System.out.println("EntityPos: "+pos);
                 }
                 default -> pos = ((BlockHitResult) lookPos).getBlockPos();
             }
