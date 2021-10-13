@@ -1,8 +1,3 @@
-/*
- * This file was created by Pyrofab. It was originally distributed as
- * part of Dead Man's Abyss Mod. Get the Source Code on github:
- * https://github.com/Ladysnake/DeadManAbyss
- */
 #version 150
 
 in vec4 Position;
@@ -12,6 +7,7 @@ uniform vec2 InSize;
 uniform vec2 OutSize;
 
 out vec2 texCoord;
+out vec2 oneTexel;
 out vec4 vPosition;
 
 void main(){
@@ -19,5 +15,8 @@ void main(){
     gl_Position = vec4(outPos.xy, 0.2, 1.0);
     vPosition = gl_Position;
 
+    oneTexel = 1.0 / InSize;
+
     texCoord = Position.xy / OutSize;
+    texCoord.y = 1.0 - texCoord.y;
 }
