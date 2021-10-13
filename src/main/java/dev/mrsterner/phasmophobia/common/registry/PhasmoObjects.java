@@ -5,7 +5,7 @@ import dev.mrsterner.phasmophobia.common.block.BlockLight;
 import dev.mrsterner.phasmophobia.common.block.entity.BlockLightEntity;
 import dev.mrsterner.phasmophobia.common.block.PlaceableBlock;
 import dev.mrsterner.phasmophobia.common.block.entity.PlaceableBlockEntity;
-import dev.mrsterner.phasmophobia.common.item.CrusifixItem;
+import dev.mrsterner.phasmophobia.common.item.CrucifixItem;
 import dev.mrsterner.phasmophobia.common.item.FlashLightItem;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
@@ -27,7 +27,7 @@ public class PhasmoObjects {
     private static final Map<BlockEntityType<?>, Identifier> BLOCK_ENTITY_TYPES = new LinkedHashMap<>();
 
     //Items
-    public static final Item CRUSIFIX = register("crusifix", new CrusifixItem(gen()));
+    public static final Item CRUCIFIX = register("crucifix", new CrucifixItem(gen()));
     public static final Item FLASHLIGHT = register("flashlight", new FlashLightItem(gen()));
 
     //Blocks
