@@ -5,34 +5,31 @@
   "name": "${name}",
   "description": "Lorem ipsum dolor sit amet",
   "authors": [
-    "[fullname]"
+    "[mrsterner]"
   ],
   "contact": {
-    "homepage": "https://github.com/axieum/fabric-example-mod",
-    "sources": "https://github.com/axieum/fabric-example-mod",
-    "issues": "https://github.com/axieum/fabric-example-mod/issues"
+    "homepage": "https://github.com/mrsterner/phasmophobia",
+    "sources": "https://github.com/mrsterner/phasmophobia",
+    "issues": "https://github.com/mrsterner/phasmophobia/issues"
   },
-  "license": "CC0",
-  "icon": "assets/modid/icon.png",
+  "license": "MIT",
+  "icon": "assets/phasmophobia/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.example.modid.Example"
+      "dev.mrsterner.phasmophobia.Phasmophobia"
+    ],
+    "client" : [
+      "dev.mrsterner.phasmophobia.PhasmophobiaClient"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "phasmophobia.mixins.json"
   ],
   "depends": {
     "java": ">=16",
     "minecraft": "1.17.x",
     "fabricloader": ">=0.11.3",
     "fabric": "*"
-  },
-  "recommends": {
-    "modid-sub": "*"
-  },
-  "suggests": {
-    "modmenu": "*"
   }
 }
