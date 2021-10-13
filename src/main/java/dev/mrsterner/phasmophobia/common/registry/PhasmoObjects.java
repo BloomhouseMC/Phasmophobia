@@ -3,6 +3,8 @@ package dev.mrsterner.phasmophobia.common.registry;
 import dev.mrsterner.phasmophobia.Phasmophobia;
 import dev.mrsterner.phasmophobia.common.block.BlockLight;
 import dev.mrsterner.phasmophobia.common.block.BlockLightEntity;
+import dev.mrsterner.phasmophobia.common.block.PlaceableBlock;
+import dev.mrsterner.phasmophobia.common.block.PlaceableBlockEntity;
 import dev.mrsterner.phasmophobia.common.item.CrusifixItem;
 import dev.mrsterner.phasmophobia.common.item.FlashLightItem;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -26,34 +28,26 @@ public class PhasmoObjects {
     private static final Map<BlockEntityType<?>, Identifier> BLOCK_ENTITY_TYPES = new LinkedHashMap<>();
 
     //Items
-    public static final Item CRUSIFIX = create("crusifix", new CrusifixItem(gen()));
-    public static final Item FLASHLIGHT = create("flashlight", new FlashLightItem(gen()));
+    public static final Item CRUSIFIX = register("crusifix", new CrusifixItem(gen()));
+    public static final Item FLASHLIGHT = register("flashlight", new FlashLightItem(gen()));
 
     //Blocks
-    public static final Block BLOCK_LIGHT = create("block_light", new BlockLight(FabricBlockSettings.copyOf(Blocks.AIR)), true);
+    public static final Block BLOCK_LIGHT = register("block_light", new BlockLight(FabricBlockSettings.copyOf(Blocks.AIR)), true);
+    public static final Block PLACEABLE = register("placeable", new PlaceableBlock(FabricBlockSettings.copyOf(Blocks.SAND)), false);
+
     //Block Entities
     public static final BlockEntityType<BlockLightEntity> BLOCK_LIGHT_ENTITY = register("block_light_entity", FabricBlockEntityTypeBuilder.create(BlockLightEntity::new,BLOCK_LIGHT).build(null));
+    public static final BlockEntityType<PlaceableBlockEntity> PLACEABLE_BLOCK_ENTITY = register("placeable_block_entity", FabricBlockEntityTypeBuilder.create(PlaceableBlockEntity::new, PLACEABLE).build(null));
 
 
 
-    public static <T extends Block> T register(String id, T block) {
-        BLOCKS.put(block, new Identifier(Phasmophobia.MODID, id));
-        return block;
-    }
 
-    public static <T extends Block> T register(String id, T block, Boolean hasBlockItem, ItemGroup itemGroup) {
-        BLOCKS.put(block, new Identifier(Phasmophobia.MODID, id));
-        if (hasBlockItem) {
-            ITEMS.put(new BlockItem(block, gen()), BLOCKS.get(block));
-        }
-        return block;
-    }
     private static <T extends BlockEntity> BlockEntityType<T> register(String id, BlockEntityType<T> type) {
         BLOCK_ENTITY_TYPES.put(type, new Identifier(Phasmophobia.MODID, id));
         return type;
     }
 
-    private static <T extends Block> T create(String name, T block, boolean createItem) {
+    private static <T extends Block> T register(String name, T block, boolean createItem) {
         BLOCKS.put(block, new Identifier(Phasmophobia.MODID, name));
         if (createItem) {
             ITEMS.put(new BlockItem(block, gen()), BLOCKS.get(block));
@@ -61,7 +55,7 @@ public class PhasmoObjects {
         return block;
     }
 
-    private static <T extends Item> T create(String name, T item) {
+    private static <T extends Item> T register(String name, T item) {
         ITEMS.put(item, new Identifier(Phasmophobia.MODID, name));
         return item;
     }

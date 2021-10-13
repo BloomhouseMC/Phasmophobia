@@ -1,4 +1,4 @@
-package dev.mrsterner.phasmophobia;
+package dev.mrsterner.phasmophobia.common;
 
 import dev.mrsterner.phasmophobia.common.registry.PhasmoObjects;
 import net.fabricmc.api.EnvType;
