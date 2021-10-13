@@ -1,0 +1,18 @@
+{
+    "targets": [
+        "swap"
+    ],
+    "passes": [
+        {
+            "name": "phasmophobia:depths",
+            "intarget": "minecraft:main",
+            "outtarget": "swap"
+
+        },
+        {
+            "name": "blit",
+            "intarget": "swap",
+            "outtarget": "minecraft:main"
+        }
+    ]
+}
