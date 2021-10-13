@@ -24,7 +24,7 @@ import static dev.mrsterner.phasmophobia.common.block.entity.PlaceableBlockEntit
 public class Phasmophobia implements ModInitializer
 {
     public static final String MODID = "phasmophobia";
-    public static final ItemGroup PHASMOPHOBIA_GROUP = FabricItemGroupBuilder.build(new Identifier(MODID), () -> new ItemStack(PhasmoObjects.CRUCIFIX));
+    public static final ItemGroup PHASMOPHOBIA_GROUP = FabricItemGroupBuilder.build(new Identifier(MODID, MODID), () -> new ItemStack(PhasmoObjects.CRUCIFIX));
 
     @Override
     public void onInitialize() {
