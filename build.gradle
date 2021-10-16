@@ -37,18 +37,8 @@ allprojects {
         modImplementation "io.github.ladysnake:satin:${satin_version}"
         // Include Satin as a Jar-in-Jar dependency (optional)
         include "io.github.ladysnake:satin:${satin_version}"
-
-        // Subprojects
-        subprojects.each {
-            implementation project(":${it.name}")
-            include project("${it.name}:") // nest within distribution
-        }
     }
 
-    // Perform tests using the JUnit test suite
-    test {
-        useJUnitPlatform()
-    }
 
     // Produce a sources distribution
     java {

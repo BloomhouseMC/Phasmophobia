@@ -8,6 +8,8 @@ import ladysnake.satin.api.managed.ShaderEffectManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
 import net.minecraft.util.Identifier;
+import net.minecraft.client.gl.GlDebug;
+
 
 public class PhasmophobiaClient implements ClientModInitializer {
     private static final ManagedShaderEffect GREYSCALE_SHADER = ShaderEffectManager.getInstance()
@@ -17,6 +19,7 @@ public class PhasmophobiaClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         BlockEntityRendererRegistry.INSTANCE.register(PhasmoObjects.PLACEABLE_BLOCK_ENTITY, ctx -> new PlaceableBlockEntityRenderer());
+        System.out.println();
         ShaderEffectRenderCallback.EVENT.register(tickDelta -> {
             if (enabled) {
                 GREYSCALE_SHADER.render(tickDelta);
