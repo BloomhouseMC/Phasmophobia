@@ -1,0 +1,17 @@
+{
+  "category": "phasmophobia:ghosts",
+  "name": "Revenant",
+  "icon": "minecraft:stone",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "text"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "phasmophobia:revenant",
+      "offset": 0.5,
+      "scale": 0.8
+    }
+  ]
+}

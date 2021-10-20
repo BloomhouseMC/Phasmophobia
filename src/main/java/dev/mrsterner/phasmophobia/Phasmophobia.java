@@ -2,13 +2,21 @@ package dev.mrsterner.phasmophobia;
 
 import dev.mrsterner.phasmophobia.common.block.PlaceableBlock;
 import dev.mrsterner.phasmophobia.common.block.entity.PlaceableBlockEntity;
+import dev.mrsterner.phasmophobia.common.entity.RevenantEntity;
 import dev.mrsterner.phasmophobia.common.registry.PhasmoObjects;
 import dev.mrsterner.phasmophobia.common.registry.PhasmoTags;
+import net.fabricmc.fabric.api.biome.v1.BiomeModification;
+import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
+import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext;
+import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.fabric.mixin.object.builder.SpawnRestrictionAccessor;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.property.Properties;
@@ -17,6 +25,9 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.world.Heightmap;
+
+import java.util.function.Predicate;
 
 import static dev.mrsterner.phasmophobia.common.block.entity.PlaceableBlockEntity.handleGUILessInventory;
 
@@ -24,10 +35,16 @@ public class Phasmophobia implements ModInitializer
 {
     public static final String MODID = "phasmophobia";
     public static final ItemGroup PHASMOPHOBIA_GROUP = FabricItemGroupBuilder.build(new Identifier(MODID, MODID), () -> new ItemStack(PhasmoObjects.CRUCIFIX));
+    private static void registerEntitySpawn(EntityType<?> type, Predicate<BiomeSelectionContext> predicate, int weight, int minGroupSize, int maxGroupSize) {
+        BiomeModifications.addSpawn(predicate, type.getSpawnGroup(), type, weight, minGroupSize, maxGroupSize);
+    }
 
     @Override
     public void onInitialize() {
         PhasmoObjects.init();
+        registerEntitySpawn(PhasmoObjects.REVENANT, BiomeSelectors.foundInOverworld().and(context -> !context.getBiome().getSpawnSettings().getSpawnEntries(PhasmoObjects.REVENANT.getSpawnGroup()).isEmpty()), 10, 1, 1);
+        SpawnRestrictionAccessor.callRegister(PhasmoObjects.REVENANT, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, RevenantEntity::canSpawn);
+
 
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
             if (player.isSneaking() && PhasmoTags.PLACEABLES.contains(player.getStackInHand(hand).getItem()) && world.getBlockState(hitResult.getBlockPos()) != PhasmoObjects.PLACEABLE.getDefaultState()) {

@@ -1,5 +1,8 @@
 {
   "itemGroup.phasmophobia.phasmophobia": "Phasmophobia",
   "item.phasmophobia.flashlight": "Flashlight",
-  "item.phasmophobia.crucifix": "Crucifix"
+  "item.phasmophobia.crucifix": "Crucifix",
+  "item.phasmophobia.journal": "Journal",
+  "entity.phasmophobia.revenant": "Revenant",
+  "item.phasmophobia.journal.landing_text": "This book is for documenting the bizarre nature of ghosts"
 }

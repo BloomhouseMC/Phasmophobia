@@ -36,6 +36,9 @@ allprojects {
 
         //Geckolib
         modImplementation "software.bernie.geckolib:geckolib-fabric-${gecko_version}"
+
+        //Patchouli
+        modImplementation "vazkii.patchouli:Patchouli:${patchouli_version}"
     }
 
 
@@ -78,6 +81,10 @@ allprojects {
         maven {
             name = 'GeckoLib'
             url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+        }
+        maven {
+            name "patchouli"
+            url "https://maven.blamejared.com"
         }
     }
 }

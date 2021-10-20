@@ -6,6 +6,7 @@ import dev.mrsterner.phasmophobia.common.block.entity.PlaceableBlockEntity;
 import dev.mrsterner.phasmophobia.common.entity.RevenantEntity;
 import dev.mrsterner.phasmophobia.common.item.CrucifixItem;
 import dev.mrsterner.phasmophobia.common.item.FlashLightItem;
+import dev.mrsterner.phasmophobia.common.item.Journal;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
@@ -33,8 +34,9 @@ public class PhasmoObjects {
     private static final Map<EntityType<?>, Identifier> ENTITY_TYPES = new LinkedHashMap<>();
 
     //Items
-    public static final Item CRUCIFIX = register("crucifix", new CrucifixItem(gen().maxCount(1)));
+    public static final Item CRUCIFIX = register("crucifix", new CrucifixItem(gen().maxCount(1),(byte) 16));
     public static final Item FLASHLIGHT = register("flashlight", new FlashLightItem(gen().maxCount(1)));
+    public static final Item JOURNAL = register("journal", new Journal(gen().maxCount(1)));
 
     //Blocks
     public static final Block PLACEABLE = register("placeable", new PlaceableBlock(FabricBlockSettings.copyOf(Blocks.STONE)), false);

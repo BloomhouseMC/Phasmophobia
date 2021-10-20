@@ -1,0 +1,17 @@
+{
+  "category": "phasmophobia:equipment",
+  "name": "Flashlight",
+  "priority": true,
+  "icon": "phasmophobia:flashlight",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "text"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "phasmophobia:flashlight",
+      "text": "Any button and Glowstone dust/Glowing ink sac/Glow berries work"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "item.phasmophobia.journal",
+  "landing_text": "item.phasmophobia.journal.landing_text",
+  "custom_book_item": "phasmophobia:journal",
+  "book_texture": "phasmophobia:textures/gui/patchouli/book.png",
+  "filler_texture": "phasmophobia:textures/gui/patchouli/page_filler.png",
+  "dont_generate_book": false,
+  "link_color": "0000ff",
+  "link_hover_color": "0000ff",
+  "progress_bar_color": "8500b9"
+}
