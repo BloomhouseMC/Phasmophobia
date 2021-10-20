@@ -3,7 +3,7 @@
   "id": "${id}",
   "version": "${version}",
   "name": "${name}",
-  "description": "Lorem ipsum dolor sit amet",
+  "description": "Phasmophobia mod for minecraft",
   "authors": [
     "[mrsterner]"
   ],

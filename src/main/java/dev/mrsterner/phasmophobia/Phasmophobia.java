@@ -5,23 +5,16 @@ import dev.mrsterner.phasmophobia.common.block.entity.PlaceableBlockEntity;
 import dev.mrsterner.phasmophobia.common.registry.PhasmoObjects;
 import dev.mrsterner.phasmophobia.common.registry.PhasmoTags;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 
 import net.fabricmc.api.ModInitializer;
 
@@ -64,7 +57,6 @@ public class Phasmophobia implements ModInitializer
             }
             return ActionResult.PASS;
         });
-
     }
 }
 

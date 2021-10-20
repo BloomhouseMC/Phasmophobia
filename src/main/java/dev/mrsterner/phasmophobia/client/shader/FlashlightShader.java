@@ -1,4 +1,4 @@
-package dev.mrsterner.phasmophobia;
+package dev.mrsterner.phasmophobia.client.shader;
 
 import dev.mrsterner.phasmophobia.common.registry.PhasmoObjects;
 import ladysnake.satin.api.event.PostWorldRenderCallback;
@@ -9,17 +9,10 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.server.ServerTickCallback;
-import net.fabricmc.fabric.api.event.world.WorldTickCallback;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;

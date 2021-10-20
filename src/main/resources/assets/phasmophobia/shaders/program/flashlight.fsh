@@ -25,6 +25,6 @@ void main(){
     float depth = LinearizeDepth(texture(DiffuseDepthSampler, texCoord).r);
     float distance = length(vec3(1., (2.*texCoord - 1.) * vec2(ScreenSize.x/ScreenSize.y,1.) * tan(radians(_FOV / 2.))) * depth);
     float d = sqrt(pow((texCoord.x - 0.5),2.0) + pow((texCoord.y - 0.5),2.0));
-    d = exp(-(d * 5.0)) * 6.0 / (distance*0.15);
+    d = exp(-(d * 5.0)) * 8.0 / (distance*0.15);
     fragColor = vec4(texture(DiffuseSampler,texCoord).rgb*clamp(1.0 + d,0.1,10.0),1.0);
 }

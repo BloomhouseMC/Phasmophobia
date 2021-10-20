@@ -8,7 +8,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
@@ -19,8 +18,6 @@ public class FlashLightItem extends Item {
     public FlashLightItem(Settings settings) {
     super(settings);
     }
-    public static BooleanProperty on;
-
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
