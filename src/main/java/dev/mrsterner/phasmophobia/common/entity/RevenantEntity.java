@@ -59,7 +59,7 @@ public class RevenantEntity extends HostileEntity implements IAnimatable, Angera
     public static DefaultAttributeContainer.Builder createMobAttributes() {
         return LivingEntity.createLivingAttributes()
             .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 20.0D)
-            .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.2D)
+            .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.1D)
             .add(EntityAttributes.GENERIC_MAX_HEALTH, 300)
             .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 200.0D)
             .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D);
@@ -102,7 +102,7 @@ public class RevenantEntity extends HostileEntity implements IAnimatable, Angera
         return PlayState.CONTINUE;
     }
     private <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
-        if(event.isMoving()){
+        if(event.getLimbSwingAmount() > 0.1F){
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.revenant.move", true));
             return PlayState.CONTINUE;
         }
@@ -194,7 +194,6 @@ public class RevenantEntity extends HostileEntity implements IAnimatable, Angera
 
         @Override
         public boolean shouldContinue() {
-            System.out.println("shouldContinue");
             if (locate((ServerWorldAccess) world, getBlockPos()) != null) {
                 System.out.println("shouldContinue false");
                 return false;
@@ -275,7 +274,6 @@ public class RevenantEntity extends HostileEntity implements IAnimatable, Angera
     }
     private static Pair<BlockPos, Integer> locate(ServerWorldAccess world, BlockPos pos) {
         PhasmoWorldState worldState = PhasmoWorldState.get(world.toServerWorld());
-        System.out.println("locate");
         for (Long longPos : worldState.crucifix) {
             System.out.println("Long");
             BlockPos crucifixPos = BlockPos.fromLong(longPos);

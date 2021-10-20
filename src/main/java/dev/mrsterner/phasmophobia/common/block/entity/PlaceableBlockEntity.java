@@ -1,7 +1,9 @@
 package dev.mrsterner.phasmophobia.common.block.entity;
 
+import dev.mrsterner.phasmophobia.common.item.CrucifixItem;
 import dev.mrsterner.phasmophobia.common.registry.PhasmoObjects;
 import dev.mrsterner.phasmophobia.common.registry.PhasmoTags;
+import dev.mrsterner.phasmophobia.common.world.PhasmoWorldState;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -151,6 +153,11 @@ public class PlaceableBlockEntity extends BlockEntity implements BlockEntityClie
                 handleGUILessInventory(stack, player, hand, inventory, 0);}
             else if (normalX > 0.5 && normalZ < 0.5) {
                 handleGUILessInventory(stack, player, hand, inventory, 1);}
+            if(player.getStackInHand(hand).getItem() instanceof CrucifixItem){
+                PhasmoWorldState worldState = PhasmoWorldState.get(world);
+                worldState.crucifix.add(pos.asLong());
+                worldState.markDirty();
+            }
             this.sync();
         }
     }

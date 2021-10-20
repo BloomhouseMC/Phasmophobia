@@ -3,8 +3,10 @@ package dev.mrsterner.phasmophobia;
 import dev.mrsterner.phasmophobia.common.block.PlaceableBlock;
 import dev.mrsterner.phasmophobia.common.block.entity.PlaceableBlockEntity;
 import dev.mrsterner.phasmophobia.common.entity.RevenantEntity;
+import dev.mrsterner.phasmophobia.common.item.CrucifixItem;
 import dev.mrsterner.phasmophobia.common.registry.PhasmoObjects;
 import dev.mrsterner.phasmophobia.common.registry.PhasmoTags;
+import dev.mrsterner.phasmophobia.common.world.PhasmoWorldState;
 import net.fabricmc.fabric.api.biome.v1.BiomeModification;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext;
@@ -59,6 +61,11 @@ public class Phasmophobia implements ModInitializer
                     PlaceableBlockEntity placeableEntity1 = (PlaceableBlockEntity) placeableEntity;
                     double normalX = (hitResult.getPos().x - pos.getX());
                     double normalZ = (hitResult.getPos().z - pos.getZ());
+                    if(player.getStackInHand(hand).getItem() instanceof CrucifixItem && !world.isClient){
+                        PhasmoWorldState worldState = PhasmoWorldState.get(world);
+                        worldState.crucifix.add(pos.asLong());
+                        worldState.markDirty();
+                    }
                     if (normalX < 0.5 && normalZ > 0.5)
                         handleGUILessInventory(player.getStackInHand(hand), player, hand, placeableEntity1.inventory, 2);
                     if (normalX > 0.5 && normalZ > 0.5)
@@ -67,7 +74,6 @@ public class Phasmophobia implements ModInitializer
                         handleGUILessInventory(player.getStackInHand(hand), player, hand, placeableEntity1.inventory, 0);
                     if (normalX > 0.5 && normalZ < 0.5)
                         handleGUILessInventory(player.getStackInHand(hand), player, hand, placeableEntity1.inventory, 1);
-
                     return ActionResult.SUCCESS;
                 }
                 return ActionResult.PASS;
