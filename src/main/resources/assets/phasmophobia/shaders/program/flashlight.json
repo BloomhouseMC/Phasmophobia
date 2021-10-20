@@ -5,7 +5,7 @@
     "dstrgb": "zero"
   },
   "vertex": "blit",
-  "fragment": "phasmophobia:depths",
+  "fragment": "phasmophobia:flashlight",
   "attributes": [ "Position" ],
   "samplers": [
     { "name": "DiffuseSampler" },
@@ -19,3 +19,4 @@
     { "name": "_FOV",       "type": "float",     "count": 1,  "values": [ 70.0 ] }
   ]
 }
+

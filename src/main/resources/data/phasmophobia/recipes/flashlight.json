@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " IL",
+    "IRI",
+    "BI "
+  ],
+  "key": {
+    "L": {
+      "tag": "phasmophobia:light"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "B": {
+      "tag": "minecraft:buttons"
+    }
+  },
+  "result": {
+    "item": "phasmophobia:flashlight",
+    "count": 1
+  }
+}
+

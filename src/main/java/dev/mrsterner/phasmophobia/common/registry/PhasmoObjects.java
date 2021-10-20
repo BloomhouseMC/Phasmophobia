@@ -1,8 +1,6 @@
 package dev.mrsterner.phasmophobia.common.registry;
 
 import dev.mrsterner.phasmophobia.Phasmophobia;
-import dev.mrsterner.phasmophobia.common.block.BlockLight;
-import dev.mrsterner.phasmophobia.common.block.entity.BlockLightEntity;
 import dev.mrsterner.phasmophobia.common.block.PlaceableBlock;
 import dev.mrsterner.phasmophobia.common.block.entity.PlaceableBlockEntity;
 import dev.mrsterner.phasmophobia.common.item.CrucifixItem;
@@ -27,15 +25,13 @@ public class PhasmoObjects {
     private static final Map<BlockEntityType<?>, Identifier> BLOCK_ENTITY_TYPES = new LinkedHashMap<>();
 
     //Items
-    public static final Item CRUCIFIX = register("crucifix", new CrucifixItem(gen()));
-    public static final Item FLASHLIGHT = register("flashlight", new FlashLightItem(gen()));
+    public static final Item CRUCIFIX = register("crucifix", new CrucifixItem(gen().maxCount(1)));
+    public static final Item FLASHLIGHT = register("flashlight", new FlashLightItem(gen().maxCount(1)));
 
     //Blocks
-    public static final Block BLOCK_LIGHT = register("block_light", new BlockLight(FabricBlockSettings.copyOf(Blocks.AIR)), true);
-    public static final Block PLACEABLE = register("placeable", new PlaceableBlock(FabricBlockSettings.copyOf(Blocks.SAND)), false);
+    public static final Block PLACEABLE = register("placeable", new PlaceableBlock(FabricBlockSettings.copyOf(Blocks.STONE)), false);
 
     //Block Entities
-    public static final BlockEntityType<BlockLightEntity> BLOCK_LIGHT_ENTITY = register("block_light_entity", FabricBlockEntityTypeBuilder.create(BlockLightEntity::new,BLOCK_LIGHT).build(null));
     public static final BlockEntityType<PlaceableBlockEntity> PLACEABLE_BLOCK_ENTITY = register("placeable_block_entity", FabricBlockEntityTypeBuilder.create(PlaceableBlockEntity::new, PLACEABLE).build(null));
 
 
