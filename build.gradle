@@ -33,6 +33,9 @@ allprojects {
         modImplementation "io.github.ladysnake:satin:${satin_version}"
         // Include Satin as a Jar-in-Jar dependency (optional)
         include "io.github.ladysnake:satin:${satin_version}"
+
+        //Geckolib
+        modImplementation "software.bernie.geckolib:geckolib-fabric-${gecko_version}"
     }
 
 
@@ -70,6 +73,11 @@ allprojects {
                 includeGroup 'io.github.ladysnake'
                 includeGroupByRegex 'io\\.github\\.onyxstudios.*'
             }
+        }
+        //GECKOLIB
+        maven {
+            name = 'GeckoLib'
+            url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
         }
     }
 }
