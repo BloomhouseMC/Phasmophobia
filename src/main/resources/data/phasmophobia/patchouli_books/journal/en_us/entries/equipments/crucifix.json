@@ -1,0 +1,17 @@
+{
+  "category": "phasmophobia:equipment",
+  "name": "Crucifix",
+  "priority": true,
+  "icon": "phasmophobia:crucifix",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "shift click on ground to place it, wards of Revenant in a radius of 16 blocks"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "phasmophobia:crucifix",
+      "text": "text"
+    }
+  ]
+}

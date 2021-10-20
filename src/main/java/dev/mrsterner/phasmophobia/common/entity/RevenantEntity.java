@@ -195,7 +195,6 @@ public class RevenantEntity extends HostileEntity implements IAnimatable, Angera
         @Override
         public boolean shouldContinue() {
             if (locate((ServerWorldAccess) world, getBlockPos()) != null) {
-                System.out.println("shouldContinue false");
                 return false;
             }
             return super.shouldContinue();
@@ -275,15 +274,12 @@ public class RevenantEntity extends HostileEntity implements IAnimatable, Angera
     private static Pair<BlockPos, Integer> locate(ServerWorldAccess world, BlockPos pos) {
         PhasmoWorldState worldState = PhasmoWorldState.get(world.toServerWorld());
         for (Long longPos : worldState.crucifix) {
-            System.out.println("Long");
             BlockPos crucifixPos = BlockPos.fromLong(longPos);
             double distance = Math.sqrt(crucifixPos.getSquaredDistance(pos));
             if (distance <= Byte.MAX_VALUE) {
-                System.out.println("MAX");
                 int radius = -1;
                 BlockEntity blockEntity = world.getBlockEntity(crucifixPos);
                 if (blockEntity instanceof PlaceableBlockEntity placeableBlockEntity) {
-                    System.out.println("Placeable");
                     for (int i = 0; i < placeableBlockEntity.size(); i++) {
                         Item item = placeableBlockEntity.getStack(i).getItem();
                         if(item instanceof CrucifixItem crucifixItem){
