@@ -46,7 +46,7 @@ public class Phasmophobia implements ModInitializer
         PhasmoObjects.init();
         PhasmoBrains.init();
         registerEntitySpawn(PhasmoObjects.REVENANT, BiomeSelectors.foundInOverworld().and(context -> !context.getBiome().getSpawnSettings().getSpawnEntries(PhasmoObjects.REVENANT.getSpawnGroup()).isEmpty()), 10, 1, 1);
-        SpawnRestrictionAccessor.callRegister(PhasmoObjects.REVENANT, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, UngodlyRevenantEntity::canSpawn);
+        SpawnRestrictionAccessor.callRegister(PhasmoObjects.REVENANT, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, UngodlyRevenantEntity::canSpawnInDark);
 
 
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
