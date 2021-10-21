@@ -7,7 +7,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
-
+//<T extends LivingEntity> extends BipedEntityModel<T>
 public class RevenantEntityModel extends AnimatedGeoModel<RevenantEntity> {
     @Override
     public Identifier getAnimationFileLocation(RevenantEntity entity) {

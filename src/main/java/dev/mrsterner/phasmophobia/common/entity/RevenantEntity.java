@@ -7,6 +7,7 @@ import dev.mrsterner.phasmophobia.common.world.PhasmoWorldState;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.client.render.entity.feature.EndermanEyesFeatureRenderer;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
@@ -117,6 +118,7 @@ public class RevenantEntity extends HostileEntity implements IAnimatable, Angera
     public boolean canTakeDamage() {
         return false;
     }
+
 
     private <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
         if(event.getLimbSwingAmount() > 0.01F){

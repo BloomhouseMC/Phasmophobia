@@ -14,6 +14,7 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 public class RevenantEntityRenderer extends GeoEntityRenderer<RevenantEntity> {
     public RevenantEntityRenderer(EntityRendererFactory.Context ctx) {
         super(ctx, new RevenantEntityModel());
+        this.addLayer(new RevenantEyesFeatureRenderer(this, new RevenantEyesRenderer(ctx, new RevenantEntityModel())));
     }
 
     @Override
