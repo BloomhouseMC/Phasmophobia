@@ -113,7 +113,10 @@ public class RevenantEntity extends HostileEntity implements IAnimatable, Angera
         return 0;
     }
 
-
+    @Override
+    public boolean canTakeDamage() {
+        return false;
+    }
 
     private <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
         if(event.getLimbSwingAmount() > 0.01F){
