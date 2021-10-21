@@ -126,6 +126,14 @@ public class UngodlyRevenantEntity extends HostileEntity implements IAnimatable 
     }
 
     @Override
+    protected void initDataTracker() {
+        super.initDataTracker();
+        this.dataTracker.startTracking(ANGER_TIME, 0);
+        this.dataTracker.startTracking(STATE, 0);
+        this.dataTracker.startTracking(HAS_TARGET, false);
+    }
+
+    @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController<>(this, "controller3", 0, this::predicate3));
         data.addAnimationController(new AnimationController<>(this, "controller2", 10, this::predicate2));
