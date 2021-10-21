@@ -2,12 +2,11 @@ package dev.mrsterner.phasmophobia;
 
 import dev.mrsterner.phasmophobia.common.block.PlaceableBlock;
 import dev.mrsterner.phasmophobia.common.block.entity.PlaceableBlockEntity;
-import dev.mrsterner.phasmophobia.common.entity.RevenantEntity;
+import dev.mrsterner.phasmophobia.common.entity.UngodlyRevenantEntity;
 import dev.mrsterner.phasmophobia.common.item.CrucifixItem;
 import dev.mrsterner.phasmophobia.common.registry.PhasmoObjects;
 import dev.mrsterner.phasmophobia.common.registry.PhasmoTags;
 import dev.mrsterner.phasmophobia.common.world.PhasmoWorldState;
-import net.fabricmc.fabric.api.biome.v1.BiomeModification;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
@@ -45,7 +44,7 @@ public class Phasmophobia implements ModInitializer
     public void onInitialize() {
         PhasmoObjects.init();
         registerEntitySpawn(PhasmoObjects.REVENANT, BiomeSelectors.foundInOverworld().and(context -> !context.getBiome().getSpawnSettings().getSpawnEntries(PhasmoObjects.REVENANT.getSpawnGroup()).isEmpty()), 10, 1, 1);
-        SpawnRestrictionAccessor.callRegister(PhasmoObjects.REVENANT, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, RevenantEntity::canSpawn);
+        SpawnRestrictionAccessor.callRegister(PhasmoObjects.REVENANT, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, UngodlyRevenantEntity::canSpawn);
 
 
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {

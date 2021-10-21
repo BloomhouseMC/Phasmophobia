@@ -1,32 +1,32 @@
 package dev.mrsterner.phasmophobia.client.model;
 
 import dev.mrsterner.phasmophobia.Phasmophobia;
-import dev.mrsterner.phasmophobia.common.entity.RevenantEntity;
+import dev.mrsterner.phasmophobia.common.entity.UngodlyRevenantEntity;
 import net.minecraft.util.Identifier;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 //<T extends LivingEntity> extends BipedEntityModel<T>
-public class RevenantEntityModel extends AnimatedGeoModel<RevenantEntity> {
+public class RevenantEntityModel extends AnimatedGeoModel<UngodlyRevenantEntity> {
     @Override
-    public Identifier getAnimationFileLocation(RevenantEntity entity) {
+    public Identifier getAnimationFileLocation(UngodlyRevenantEntity entity) {
         return new Identifier(Phasmophobia.MODID, "animations/revenant.animation.json");
     }
 
     @Override
-    public Identifier getModelLocation(RevenantEntity entity) {
+    public Identifier getModelLocation(UngodlyRevenantEntity entity) {
         return new Identifier(Phasmophobia.MODID, "geo/revenant.geo.json");
     }
 
     @Override
-    public Identifier getTextureLocation(RevenantEntity entity) {
+    public Identifier getTextureLocation(UngodlyRevenantEntity entity) {
         return new Identifier(Phasmophobia.MODID, "textures/entity/revenant.png");
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public void setLivingAnimations(RevenantEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
+    public void setLivingAnimations(UngodlyRevenantEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
         IBone head = this.getAnimationProcessor().getBone("head");
 

@@ -1,13 +1,9 @@
 package dev.mrsterner.phasmophobia.common.entity;
 
-import dev.mrsterner.phasmophobia.common.block.PlaceableBlock;
 import dev.mrsterner.phasmophobia.common.block.entity.PlaceableBlockEntity;
 import dev.mrsterner.phasmophobia.common.item.CrucifixItem;
 import dev.mrsterner.phasmophobia.common.world.PhasmoWorldState;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.render.entity.feature.EndermanEyesFeatureRenderer;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
@@ -19,12 +15,8 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.*;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.passive.MerchantEntity;
-import net.minecraft.entity.passive.TurtleEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.Pair;
 import net.minecraft.util.TimeHelper;
 import net.minecraft.util.math.BlockPos;
@@ -43,15 +35,15 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import java.util.Random;
 import java.util.UUID;
 
-public class RevenantEntity extends HostileEntity implements IAnimatable, Angerable {
+public class UngodlyRevenantEntity extends HostileEntity implements IAnimatable, Angerable {
     AnimationFactory factory = new AnimationFactory(this);
-    private static final TrackedData<Integer> ANGER_TIME = DataTracker.registerData(RevenantEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    public static final TrackedData<Integer> STATE = DataTracker.registerData(RevenantEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    public static final TrackedData<Boolean> HAS_TARGET = DataTracker.registerData(RevenantEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final TrackedData<Integer> ANGER_TIME = DataTracker.registerData(UngodlyRevenantEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    public static final TrackedData<Integer> STATE = DataTracker.registerData(UngodlyRevenantEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    public static final TrackedData<Boolean> HAS_TARGET = DataTracker.registerData(UngodlyRevenantEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private static final UniformIntProvider ANGER_TIME_RANGE = TimeHelper.betweenSeconds(20, 39);
     private UUID targetUuid;
 
-    public RevenantEntity(EntityType<? extends HostileEntity> type, World worldIn) {
+    public UngodlyRevenantEntity(EntityType<? extends HostileEntity> type, World worldIn) {
         super(type, worldIn);
         this.ignoreCameraFrustum = true;
     }
@@ -86,13 +78,13 @@ public class RevenantEntity extends HostileEntity implements IAnimatable, Angera
     }
 
     protected void initCustomGoals() {
-        this.goalSelector.add(5, new RevenantEntity.AttackGoal(this, 1.5D, false));
+        this.goalSelector.add(5, new UngodlyRevenantEntity.AttackGoal(this, 1.5D, false));
         this.goalSelector.add(7, new WanderAroundFarGoal(this, 1.0D));
         this.targetSelector.add(1, new RevengeGoal(this));
         this.targetSelector.add(2, new ActiveTargetGoal(this, PlayerEntity.class, true));
       }
 
-    public static boolean canSpawn(EntityType<RevenantEntity> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
+    public static boolean canSpawn(EntityType<UngodlyRevenantEntity> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
         return locate(world, pos) == null && MobEntity.canMobSpawn(type, world, spawnReason, pos, random);
     }
 
@@ -186,9 +178,9 @@ public class RevenantEntity extends HostileEntity implements IAnimatable, Angera
         this.setAngerTime(ANGER_TIME_RANGE.get(this.random));
     }
     public class AttackGoal extends MeleeAttackGoal {
-        private final RevenantEntity entity;
+        private final UngodlyRevenantEntity entity;
 
-        public AttackGoal(RevenantEntity zombieIn, double speedIn, boolean longMemoryIn) {
+        public AttackGoal(UngodlyRevenantEntity zombieIn, double speedIn, boolean longMemoryIn) {
             super(zombieIn, speedIn, longMemoryIn);
             this.entity = zombieIn;
         }
