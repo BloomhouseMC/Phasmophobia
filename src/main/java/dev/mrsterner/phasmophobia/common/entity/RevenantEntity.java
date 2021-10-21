@@ -63,11 +63,6 @@ public class RevenantEntity extends HostileEntity implements IAnimatable, Angera
     }
 
     @Override
-    public void takeKnockback(double strength, double x, double z) {
-        super.takeKnockback(strength, x, z);
-    }
-
-    @Override
     public boolean isPushable() {
         return false;
     }
@@ -76,10 +71,10 @@ public class RevenantEntity extends HostileEntity implements IAnimatable, Angera
         return LivingEntity.createLivingAttributes()
             .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 20.0D)
             .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.15D)
-            .add(EntityAttributes.GENERIC_MAX_HEALTH, 300)
-            .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 200.0D)
+            .add(EntityAttributes.GENERIC_MAX_HEALTH, Double.MAX_VALUE)
+            .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, Double.MAX_VALUE)
             .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D)
-            .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 500);
+            .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, Double.MAX_VALUE);
 
     }
 
@@ -138,8 +133,8 @@ public class RevenantEntity extends HostileEntity implements IAnimatable, Angera
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<RevenantEntity>(this, "controller3", 0, this::predicate3));
-        data.addAnimationController(new AnimationController<RevenantEntity>(this, "controller2", 10, this::predicate2));
+        data.addAnimationController(new AnimationController<>(this, "controller3", 0, this::predicate3));
+        data.addAnimationController(new AnimationController<>(this, "controller2", 10, this::predicate2));
     }
 
 
