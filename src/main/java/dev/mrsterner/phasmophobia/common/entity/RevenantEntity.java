@@ -55,14 +55,31 @@ public class RevenantEntity extends HostileEntity implements IAnimatable, Angera
         this.ignoreCameraFrustum = true;
     }
 
+    @Override
+    public void tick() {
+        super.tick();
+        if(world.isDay())this.kill();
+    }
+
+    @Override
+    public void takeKnockback(double strength, double x, double z) {
+        super.takeKnockback(strength, x, z);
+    }
+
+    @Override
+    public boolean isPushable() {
+        return false;
+    }
 
     public static DefaultAttributeContainer.Builder createMobAttributes() {
         return LivingEntity.createLivingAttributes()
             .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 20.0D)
-            .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.1D)
+            .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.15D)
             .add(EntityAttributes.GENERIC_MAX_HEALTH, 300)
             .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 200.0D)
-            .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D);
+            .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D)
+            .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 500);
+
     }
 
     @Override
@@ -75,7 +92,7 @@ public class RevenantEntity extends HostileEntity implements IAnimatable, Angera
     protected void initCustomGoals() {
         this.goalSelector.add(5, new RevenantEntity.AttackGoal(this, 1.5D, false));
         this.goalSelector.add(7, new WanderAroundFarGoal(this, 1.0D));
-        this.targetSelector.add(1, (new RevengeGoal(this, new Class[0])).setGroupRevenge(new Class[]{ZombifiedPiglinEntity.class}));
+        this.targetSelector.add(1, new RevengeGoal(this));
         this.targetSelector.add(2, new ActiveTargetGoal(this, PlayerEntity.class, true));
       }
 
@@ -97,16 +114,14 @@ public class RevenantEntity extends HostileEntity implements IAnimatable, Angera
     }
 
 
-    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.revenant.idle", true));
-        return PlayState.CONTINUE;
-    }
+
     private <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
-        if(event.getLimbSwingAmount() > 0.1F){
+        if(event.getLimbSwingAmount() > 0.01F){
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.revenant.move", true));
-            return PlayState.CONTINUE;
+        }else{
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.revenant.idle", true));
         }
-        return PlayState.STOP;
+        return PlayState.CONTINUE;
     }
     private <E extends IAnimatable> PlayState predicate3(AnimationEvent<E> event) {
         if(this.dataTracker.get(STATE) == 1){
@@ -118,9 +133,8 @@ public class RevenantEntity extends HostileEntity implements IAnimatable, Angera
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<RevenantEntity>(this, "controller", 0, this::predicate));
-        data.addAnimationController(new AnimationController<RevenantEntity>(this, "controller2", 0, this::predicate2));
         data.addAnimationController(new AnimationController<RevenantEntity>(this, "controller3", 0, this::predicate3));
+        data.addAnimationController(new AnimationController<RevenantEntity>(this, "controller2", 10, this::predicate2));
     }
 
 
@@ -173,19 +187,10 @@ public class RevenantEntity extends HostileEntity implements IAnimatable, Angera
     }
     public class AttackGoal extends MeleeAttackGoal {
         private final RevenantEntity entity;
-        private final double speedModifier;
-        private int ticksUntilNextAttack;
-        private int ticksUntilNextPathRecalculation;
-        private final boolean followingTargetEvenIfNotSeen;
-        private double targetX;
-        private double targetY;
-        private double targetZ;
 
         public AttackGoal(RevenantEntity zombieIn, double speedIn, boolean longMemoryIn) {
             super(zombieIn, speedIn, longMemoryIn);
             this.entity = zombieIn;
-            this.speedModifier = speedIn;
-            this.followingTargetEvenIfNotSeen = longMemoryIn;
         }
 
         public void start() {
@@ -199,42 +204,13 @@ public class RevenantEntity extends HostileEntity implements IAnimatable, Angera
             }
             return super.shouldContinue();
         }
-
+        @Override
         public void stop() {
             super.stop();
             this.entity.setAttacking(false);
             this.entity.setAttackingState(0);
         }
 
-        public void tick() {
-            LivingEntity livingentity = this.entity.getTarget();
-            if (livingentity != null) {
-                this.mob.getLookControl().lookAt(livingentity, 30.0F, 30.0F);
-                double d0 = this.mob.squaredDistanceTo(livingentity.getX(), livingentity.getY(), livingentity.getZ());
-                this.ticksUntilNextPathRecalculation = Math.max(this.ticksUntilNextPathRecalculation - 1, 0);
-                if ((this.followingTargetEvenIfNotSeen || this.mob.getVisibilityCache().canSee(livingentity))
-                    && this.ticksUntilNextAttack <= 0
-                    && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D
-                    || livingentity.squaredDistanceTo(this.targetX, this.targetY, this.targetZ) >= 1.0D
-                    || this.mob.getRandom().nextFloat() < 0.05F)) {
-                    this.targetX = livingentity.getX();
-                    this.targetY = livingentity.getY();
-                    this.targetZ = livingentity.getZ();
-                    this.ticksUntilNextPathRecalculation = 4 + this.mob.getRandom().nextInt(7);
-                    if (d0 > 1024.0D) {
-                        this.ticksUntilNextPathRecalculation += 10;
-                    } else if (d0 > 256.0D) {
-                        this.ticksUntilNextPathRecalculation += 5;
-                    }
-
-                    if (!this.mob.getNavigation().startMovingTo(livingentity, this.speedModifier)) {
-                        this.ticksUntilNextPathRecalculation += 15;
-                    }
-                }
-                this.ticksUntilNextAttack = Math.max(this.ticksUntilNextAttack - 0, 0);
-                this.attack(livingentity, d0);
-            }
-        }
 
         @Override
         protected void attack(LivingEntity livingentity, double squaredDistance) {

@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 public class PlaceableBlock extends HorizontalFacingBlock implements BlockEntityProvider {
     public PlaceableBlock(Settings settings) {
-        super(settings.nonOpaque());
+        super(settings.nonOpaque().breakInstantly());
         setDefaultState(this.stateManager.getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH));
     }
 
