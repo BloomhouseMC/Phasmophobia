@@ -22,7 +22,7 @@ public class UngodlyRevenantBrain {
     public UngodlyRevenantBrain() {
     }
 
-    protected static Brain<?> create(Brain<UngodlyRevenantEntity> brain) {
+    protected static Brain<?> create(UngodlyRevenantEntity ungodlyRevenantEntity, Brain<UngodlyRevenantEntity> brain) {
         addCoreTasks(brain);
         addIdleTasks(brain);
         addFightTasks(brain);
@@ -33,15 +33,23 @@ public class UngodlyRevenantBrain {
     }
 
     private static void addCoreTasks(Brain<UngodlyRevenantEntity> brain) {
-        brain.setTaskList(Activity.CORE, 0, ImmutableList.of(new LookAroundTask(45, 90), new WanderAroundTask()));
+        brain.setTaskList(Activity.CORE, 0,
+            ImmutableList.of(
+                new StayAboveWaterTask(0.8F),
+                new WalkTask(2.0F),
+                new LookAroundTask(45, 90),
+                new AttackTask<>(10, 1),
+                new WanderAroundTask()));
     }
 
     private static void addIdleTasks(Brain<UngodlyRevenantEntity> brain) {
-        brain.setTaskList(Activity.IDLE, 10, ImmutableList.of(new PacifyTask(MemoryModuleType.NEAREST_REPELLENT, 200), GoToRememberedPositionTask.toBlock(MemoryModuleType.NEAREST_REPELLENT, 1.0F, 8, true), makeRandomWalkTask()));
+        brain.setTaskList(Activity.IDLE, 10, ImmutableList.of(
+            new PacifyTask(MemoryModuleType.NEAREST_REPELLENT, 200), GoToRememberedPositionTask.toBlock(MemoryModuleType.NEAREST_REPELLENT, 1.0F, 8, true), makeRandomWalkTask()));
     }
 
     private static void addFightTasks(Brain<UngodlyRevenantEntity> brain) {
-        brain.setTaskList(Activity.FIGHT, 10, ImmutableList.of(new PacifyTask(MemoryModuleType.NEAREST_REPELLENT, 200)), MemoryModuleType.ATTACK_TARGET);
+        brain.setTaskList(Activity.FIGHT, 0, ImmutableList.of(
+            new PacifyTask(MemoryModuleType.NEAREST_REPELLENT, 200)), MemoryModuleType.ATTACK_TARGET);
     }
 
     private static RandomTask<UngodlyRevenantEntity> makeRandomWalkTask() {

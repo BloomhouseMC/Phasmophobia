@@ -24,7 +24,6 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Pair;
 import net.minecraft.util.TimeHelper;
 import net.minecraft.util.math.BlockPos;
@@ -42,45 +41,23 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import java.util.Random;
 import java.util.UUID;
-
-public class UngodlyRevenantEntity extends HostileEntity implements IAnimatable, Angerable {
+/*
+public class RevenantEntity extends HostileEntity implements IAnimatable {
     AnimationFactory factory = new AnimationFactory(this);
-    private static final TrackedData<Integer> ANGER_TIME = DataTracker.registerData(UngodlyRevenantEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    public static final TrackedData<Integer> STATE = DataTracker.registerData(UngodlyRevenantEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    public static final TrackedData<Boolean> HAS_TARGET = DataTracker.registerData(UngodlyRevenantEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    protected static final ImmutableList<SensorType<? extends Sensor<? super UngodlyRevenantEntity>>> SENSORS;
-    protected static final ImmutableList<MemoryModuleType<?>> MEMORY_MODULES;
+    private static final TrackedData<Integer> ANGER_TIME = DataTracker.registerData(RevenantEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    public static final TrackedData<Integer> STATE = DataTracker.registerData(RevenantEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    public static final TrackedData<Boolean> HAS_TARGET = DataTracker.registerData(RevenantEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private static final UniformIntProvider ANGER_TIME_RANGE = TimeHelper.betweenSeconds(20, 39);
+    protected static final ImmutableList<SensorType<? extends Sensor<? super RevenantEntity>>> SENSORS;
+    protected static final ImmutableList<MemoryModuleType<?>> MEMORY_MODULES;
     private UUID targetUuid;
 
-    public UngodlyRevenantEntity(EntityType<? extends HostileEntity> type, World worldIn) {
+    public RevenantEntity(EntityType<? extends HostileEntity> type, World worldIn) {
         super(type, worldIn);
         this.ignoreCameraFrustum = true;
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-        if(world.isDay())this.kill();
-    }
-
-    @Override
-    public boolean isPushable() {
-        return false;
-    }
-
-    public static DefaultAttributeContainer.Builder createMobAttributes() {
-        return LivingEntity.createLivingAttributes()
-            .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 20.0D)
-            .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.15D)
-            .add(EntityAttributes.GENERIC_MAX_HEALTH, Double.MAX_VALUE)
-            .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, Double.MAX_VALUE)
-            .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D)
-            .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, Double.MAX_VALUE);
-
-    }
-
-    protected Brain.Profile<UngodlyRevenantEntity> createBrainProfile() {
+    protected Brain.Profile<RevenantEntity> createBrainProfile() {
         return Brain.createProfile(MEMORY_MODULES, SENSORS);
     }
 
@@ -88,17 +65,8 @@ public class UngodlyRevenantEntity extends HostileEntity implements IAnimatable,
         return UngodlyRevenantBrain.create(this, this.createBrainProfile().deserialize(dynamic));
     }
 
-    public Brain<UngodlyRevenantEntity> getBrain() {
-        return (Brain<UngodlyRevenantEntity>) super.getBrain();
-    }
-
-    @Override
-    protected void mobTick() {
-        this.world.getProfiler().push("revenantBrain");
-        this.getBrain().tick((ServerWorld)this.world, this);
-        this.world.getProfiler().pop();
-        UngodlyRevenantBrain.refreshActivities(this);
-        super.mobTick();
+    public Brain<RevenantEntity> getBrain() {
+        return (Brain<RevenantEntity>) super.getBrain();
     }
 
     static {
@@ -125,16 +93,31 @@ public class UngodlyRevenantEntity extends HostileEntity implements IAnimatable,
             MemoryModuleType.ANGRY_AT);
     }
 
-    public static boolean canSpawn(EntityType<UngodlyRevenantEntity> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
+    @Override
+    public void tick() {
+        super.tick();
+        if(world.isDay())this.kill();
+    }
+
+    @Override
+    public boolean isPushable() {
+        return false;
+    }
+
+    public static DefaultAttributeContainer.Builder createMobAttributes() {
+        return LivingEntity.createLivingAttributes()
+            .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 20.0D)
+            .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.15D)
+            .add(EntityAttributes.GENERIC_MAX_HEALTH, Double.MAX_VALUE)
+            .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, Double.MAX_VALUE)
+            .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D)
+            .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, Double.MAX_VALUE);
+    }
+
+
+
+    public static boolean canSpawn(EntityType<RevenantEntity> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
         return locate(world, pos) == null && MobEntity.canMobSpawn(type, world, spawnReason, pos, random);
-    }
-
-    public int getAttckingState() {
-        return this.dataTracker.get(STATE);
-    }
-
-    public void setAttackingState(int time) {
-        this.dataTracker.set(STATE, time);
     }
 
     @Override
@@ -177,25 +160,6 @@ public class UngodlyRevenantEntity extends HostileEntity implements IAnimatable,
         return this.factory;
     }
 
-    @Override
-    public int getAngerTime() {
-        return this.dataTracker.get(ANGER_TIME);
-    }
-
-    @Override
-    public void setAngerTime(int ticks) {
-        this.dataTracker.set(ANGER_TIME, ticks);
-    }
-
-    @Override
-    public UUID getAngryAt() {
-        return this.targetUuid;
-    }
-
-    @Override
-    public void setAngryAt(@Nullable UUID uuid) {
-        this.targetUuid = uuid;
-    }
 
     @Override
     public void setTarget(@Nullable LivingEntity target) {
@@ -214,58 +178,7 @@ public class UngodlyRevenantEntity extends HostileEntity implements IAnimatable,
         this.dataTracker.startTracking(HAS_TARGET, false);
     }
 
-    @Override
-    public void chooseRandomAngerTime() {
-        this.setAngerTime(ANGER_TIME_RANGE.get(this.random));
-    }
-    public class AttackGoal extends MeleeAttackGoal {
-        private final UngodlyRevenantEntity entity;
 
-        public AttackGoal(UngodlyRevenantEntity zombieIn, double speedIn, boolean longMemoryIn) {
-            super(zombieIn, speedIn, longMemoryIn);
-            this.entity = zombieIn;
-        }
-
-        public void start() {
-            super.start();
-        }
-
-        @Override
-        public boolean shouldContinue() {
-            if (locate((ServerWorldAccess) world, getBlockPos()) != null) {
-                return false;
-            }
-            return super.shouldContinue();
-        }
-        @Override
-        public void stop() {
-            super.stop();
-            this.entity.setAttacking(false);
-            this.entity.setAttackingState(0);
-        }
-
-
-        @Override
-        protected void attack(LivingEntity livingentity, double squaredDistance) {
-            double d0 = this.getSquaredMaxAttackDistance(livingentity);
-            if (squaredDistance <= d0 && this.getCooldown() <= 0) {
-                this.resetCooldown();
-                this.entity.setAttackingState(1);
-                this.mob.tryAttack(livingentity);
-            }
-        }
-
-        @Override
-        protected int getMaxCooldown() {
-            return 50;
-        }
-
-        @Override
-        protected double getSquaredMaxAttackDistance(LivingEntity entity) {
-            return (double) (this.mob.getWidth() * 1.0F * this.mob.getWidth() * 1.0F + entity.getWidth());
-        }
-
-    }
     @Override
     public boolean canHaveStatusEffect(StatusEffectInstance effect) {
         return false;
@@ -304,4 +217,8 @@ public class UngodlyRevenantEntity extends HostileEntity implements IAnimatable,
         }
         return null;
     }
+
+
 }
+
+ */

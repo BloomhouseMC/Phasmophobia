@@ -4,6 +4,7 @@ import dev.mrsterner.phasmophobia.common.block.PlaceableBlock;
 import dev.mrsterner.phasmophobia.common.block.entity.PlaceableBlockEntity;
 import dev.mrsterner.phasmophobia.common.entity.UngodlyRevenantEntity;
 import dev.mrsterner.phasmophobia.common.item.CrucifixItem;
+import dev.mrsterner.phasmophobia.common.registry.PhasmoBrains;
 import dev.mrsterner.phasmophobia.common.registry.PhasmoObjects;
 import dev.mrsterner.phasmophobia.common.registry.PhasmoTags;
 import dev.mrsterner.phasmophobia.common.world.PhasmoWorldState;
@@ -43,6 +44,7 @@ public class Phasmophobia implements ModInitializer
     @Override
     public void onInitialize() {
         PhasmoObjects.init();
+        PhasmoBrains.init();
         registerEntitySpawn(PhasmoObjects.REVENANT, BiomeSelectors.foundInOverworld().and(context -> !context.getBiome().getSpawnSettings().getSpawnEntries(PhasmoObjects.REVENANT.getSpawnGroup()).isEmpty()), 10, 1, 1);
         SpawnRestrictionAccessor.callRegister(PhasmoObjects.REVENANT, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, UngodlyRevenantEntity::canSpawn);
 

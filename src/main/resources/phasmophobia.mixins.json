@@ -4,6 +4,7 @@
   "package": "dev.mrsterner.phasmophobia.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "SensorTypeMixin",
     "ServerPlayerInteractionManagerMixin"
   ],
   "server": [],
