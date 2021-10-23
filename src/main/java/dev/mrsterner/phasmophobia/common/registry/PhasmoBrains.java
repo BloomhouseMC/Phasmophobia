@@ -1,12 +1,10 @@
 package dev.mrsterner.phasmophobia.common.registry;
 
 
+import dev.mrsterner.phasmophobia.common.entity.ai.RevenantSpecificSensor;
 import dev.mrsterner.phasmophobia.mixin.SensorTypeMixin;
-import net.minecraft.block.Block;
 import net.minecraft.entity.ai.brain.sensor.Sensor;
 import net.minecraft.entity.ai.brain.sensor.SensorType;
-import net.minecraft.entity.mob.PiglinBrain;
-import net.minecraft.entity.mob.PiglinBruteBrain;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
