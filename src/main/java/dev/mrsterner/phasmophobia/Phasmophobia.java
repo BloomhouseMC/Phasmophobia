@@ -2,7 +2,7 @@ package dev.mrsterner.phasmophobia;
 
 import dev.mrsterner.phasmophobia.common.block.PlaceableBlock;
 import dev.mrsterner.phasmophobia.common.block.entity.PlaceableBlockEntity;
-import dev.mrsterner.phasmophobia.common.entity.UngodlyRevenantEntity;
+import dev.mrsterner.phasmophobia.common.entity.RevenantEntity;
 import dev.mrsterner.phasmophobia.common.item.CrucifixItem;
 import dev.mrsterner.phasmophobia.common.registry.PhasmoBrains;
 import dev.mrsterner.phasmophobia.common.registry.PhasmoObjects;
@@ -46,7 +46,7 @@ public class Phasmophobia implements ModInitializer
         PhasmoObjects.init();
         PhasmoBrains.init();
         registerEntitySpawn(PhasmoObjects.REVENANT, BiomeSelectors.foundInOverworld().and(context -> !context.getBiome().getSpawnSettings().getSpawnEntries(PhasmoObjects.REVENANT.getSpawnGroup()).isEmpty()), 10, 1, 1);
-        SpawnRestrictionAccessor.callRegister(PhasmoObjects.REVENANT, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, UngodlyRevenantEntity::canSpawnInDark);
+        SpawnRestrictionAccessor.callRegister(PhasmoObjects.REVENANT, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, RevenantEntity::canSpawnInDark);
 
 
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {

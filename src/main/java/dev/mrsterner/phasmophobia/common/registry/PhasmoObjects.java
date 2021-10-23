@@ -3,7 +3,7 @@ package dev.mrsterner.phasmophobia.common.registry;
 import dev.mrsterner.phasmophobia.Phasmophobia;
 import dev.mrsterner.phasmophobia.common.block.PlaceableBlock;
 import dev.mrsterner.phasmophobia.common.block.entity.PlaceableBlockEntity;
-import dev.mrsterner.phasmophobia.common.entity.UngodlyRevenantEntity;
+import dev.mrsterner.phasmophobia.common.entity.RevenantEntity;
 import dev.mrsterner.phasmophobia.common.item.CrucifixItem;
 import dev.mrsterner.phasmophobia.common.item.FlashLightItem;
 import dev.mrsterner.phasmophobia.common.item.Journal;
@@ -45,7 +45,7 @@ public class PhasmoObjects {
     public static final BlockEntityType<PlaceableBlockEntity> PLACEABLE_BLOCK_ENTITY = register("placeable_block_entity", FabricBlockEntityTypeBuilder.create(PlaceableBlockEntity::new, PLACEABLE).build(null));
 
     //Entities
-    public static final EntityType<UngodlyRevenantEntity> REVENANT = create("revenant", FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, UngodlyRevenantEntity::new).dimensions(EntityDimensions.changing(1f, 1.75f)).build());
+    public static final EntityType<RevenantEntity> REVENANT = create("revenant", FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, RevenantEntity::new).dimensions(EntityDimensions.changing(1f, 1.75f)).build());
 
 
 
@@ -81,6 +81,6 @@ public class PhasmoObjects {
         BLOCK_ENTITY_TYPES.keySet().forEach(blockEntityType -> Registry.register(Registry.BLOCK_ENTITY_TYPE, BLOCK_ENTITY_TYPES.get(blockEntityType), blockEntityType));
         ITEMS.keySet().forEach(item -> Registry.register(Registry.ITEM, ITEMS.get(item), item));
         ENTITY_TYPES.keySet().forEach(entityType -> Registry.register(Registry.ENTITY_TYPE, ENTITY_TYPES.get(entityType), entityType));
-        FabricDefaultAttributeRegistry.register(REVENANT, UngodlyRevenantEntity.createMobAttributes());
+        FabricDefaultAttributeRegistry.register(REVENANT, RevenantEntity.createMobAttributes());
     }
 }
