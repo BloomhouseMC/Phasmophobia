@@ -1,32 +1,36 @@
 package dev.mrsterner.phasmophobia.client.model;
 
 import dev.mrsterner.phasmophobia.Phasmophobia;
-import dev.mrsterner.phasmophobia.common.entity.RevenantEntity;
+import dev.mrsterner.phasmophobia.common.entity.BaseGhostEntity;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
-//<T extends LivingEntity> extends BipedEntityModel<T>
-public class RevenantEntityModel extends AnimatedGeoModel<RevenantEntity> {
-    @Override
-    public Identifier getAnimationFileLocation(RevenantEntity entity) {
-        return new Identifier(Phasmophobia.MODID, "animations/revenant.animation.json");
+public class BaseGhostEntityModel extends AnimatedGeoModel<BaseGhostEntity> {
+    public String getEntity(BaseGhostEntity ghostEntity){
+        return Registry.ENTITY_TYPE.getKey(ghostEntity.getType()).get().getValue().getPath();
     }
 
     @Override
-    public Identifier getModelLocation(RevenantEntity entity) {
-        return new Identifier(Phasmophobia.MODID, "geo/revenant.geo.json");
+    public Identifier getAnimationFileLocation(BaseGhostEntity entity) {
+        return new Identifier(Phasmophobia.MODID, "animations/"+getEntity(entity)+".animation.json");
     }
 
     @Override
-    public Identifier getTextureLocation(RevenantEntity entity) {
-        return new Identifier(Phasmophobia.MODID, "textures/entity/revenant.png");
+    public Identifier getModelLocation(BaseGhostEntity entity) {
+        return new Identifier(Phasmophobia.MODID, "geo/"+getEntity(entity)+".geo.json");
+    }
+
+    @Override
+    public Identifier getTextureLocation(BaseGhostEntity entity) {
+        return new Identifier(Phasmophobia.MODID, "textures/entity/"+getEntity(entity)+".png");
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public void setLivingAnimations(RevenantEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
+    public void setLivingAnimations(BaseGhostEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
         IBone head = this.getAnimationProcessor().getBone("head");
 

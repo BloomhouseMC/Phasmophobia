@@ -23,14 +23,11 @@ import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.mob.Hoglin;
-import net.minecraft.entity.mob.HoglinBrain;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.DebugInfoSender;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -49,7 +46,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import java.util.Random;
 
-public class RevenantEntity extends AbstractGhostEntity implements IAnimatable {
+public class RevenantEntity extends BaseGhostEntity implements IAnimatable {
     private int movementCooldownTicks;
     public static final TrackedData<Boolean> ATTACKING = DataTracker.registerData(RevenantEntity.class,
                                                                                   TrackedDataHandlerRegistry.BOOLEAN);
@@ -84,7 +81,7 @@ public class RevenantEntity extends AbstractGhostEntity implements IAnimatable {
 
     AnimationFactory factory = new AnimationFactory(this);
 
-    public RevenantEntity(EntityType<? extends AbstractGhostEntity> entityType, World world) {
+    public RevenantEntity(EntityType<? extends BaseGhostEntity> entityType, World world) {
         super(entityType, world);
         this.ignoreCameraFrustum = true;
     }
