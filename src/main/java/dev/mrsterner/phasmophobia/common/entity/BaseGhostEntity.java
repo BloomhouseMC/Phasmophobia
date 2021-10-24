@@ -26,7 +26,8 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 public class BaseGhostEntity extends HostileEntity implements IAnimatable {
     protected int timeInOverworld;
     AnimationFactory factory = new AnimationFactory(this);
-    public static final TrackedData<Boolean> ATTACKING = DataTracker.registerData(BaseGhostEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    public static final TrackedData<Boolean> ATTACKING = DataTracker.registerData(RevenantEntity.class,
+        TrackedDataHandlerRegistry.BOOLEAN);
 
     public BaseGhostEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);

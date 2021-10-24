@@ -37,18 +37,13 @@ import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import java.util.Random;
 
 public class RevenantEntity extends BaseGhostEntity implements IAnimatable {
     private int movementCooldownTicks;
-    public static final TrackedData<Boolean> ATTACKING = DataTracker.registerData(RevenantEntity.class,
+    public static final TrackedData<Boolean> ATTACKING = DataTracker.registerData(BaseGhostEntity.class,
                                                                                   TrackedDataHandlerRegistry.BOOLEAN);
     public static final TrackedData<Boolean> HAS_TARGET = DataTracker.registerData(RevenantEntity.class,
                                                                                    TrackedDataHandlerRegistry.BOOLEAN);
@@ -79,7 +74,6 @@ public class RevenantEntity extends BaseGhostEntity implements IAnimatable {
             MemoryModuleType.ANGRY_AT);
     }
 
-    AnimationFactory factory = new AnimationFactory(this);
 
     public RevenantEntity(EntityType<? extends BaseGhostEntity> entityType, World world) {
         super(entityType, world);
@@ -249,33 +243,6 @@ public class RevenantEntity extends BaseGhostEntity implements IAnimatable {
         this.dataTracker.startTracking(ANGER_TIME, 0);
         this.dataTracker.startTracking(ATTACKING, false);
         this.dataTracker.startTracking(HAS_TARGET, false);
-    }
-
-    private <E extends IAnimatable> PlayState basicMovement(AnimationEvent<E> event) {
-        if (event.getLimbSwingAmount() > 0.01F) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.revenant.move", true));
-        } else {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.revenant.idle", true));
-        }
-        return PlayState.CONTINUE;
-    }
-
-    public int getMovementCooldownTicks() {
-        return this.movementCooldownTicks;
-    }
-
-    private <E extends IAnimatable> PlayState attackingMovement(AnimationEvent<E> event) {
-        if (this.dataTracker.get(ATTACKING)) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.revenant.attack", true));
-            return PlayState.CONTINUE;
-        }
-        return PlayState.STOP;
-    }
-
-    @Override
-    public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "Attacking", 0, this::attackingMovement));
-        data.addAnimationController(new AnimationController<>(this, "BasicMovement", 10, this::basicMovement));
     }
 
     @Override

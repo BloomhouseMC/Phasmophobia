@@ -11,7 +11,6 @@ import net.minecraft.util.registry.Registry;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 public class PhasmoBrains {
     public static final Map<SensorType, Identifier> SENSOR = new LinkedHashMap<>();
