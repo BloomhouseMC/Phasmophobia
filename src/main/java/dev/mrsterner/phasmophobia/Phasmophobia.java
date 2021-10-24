@@ -5,6 +5,7 @@ import dev.mrsterner.phasmophobia.common.block.entity.PlaceableBlockEntity;
 import dev.mrsterner.phasmophobia.common.entity.RevenantEntity;
 import dev.mrsterner.phasmophobia.common.item.CrucifixItem;
 import dev.mrsterner.phasmophobia.common.registry.PhasmoBrains;
+import dev.mrsterner.phasmophobia.common.registry.PhasmoEntities;
 import dev.mrsterner.phasmophobia.common.registry.PhasmoObjects;
 import dev.mrsterner.phasmophobia.common.registry.PhasmoTags;
 import dev.mrsterner.phasmophobia.common.world.PhasmoWorldState;
@@ -37,16 +38,13 @@ public class Phasmophobia implements ModInitializer
 {
     public static final String MODID = "phasmophobia";
     public static final ItemGroup PHASMOPHOBIA_GROUP = FabricItemGroupBuilder.build(new Identifier(MODID, MODID), () -> new ItemStack(PhasmoObjects.CRUCIFIX));
-    private static void registerEntitySpawn(EntityType<?> type, Predicate<BiomeSelectionContext> predicate, int weight, int minGroupSize, int maxGroupSize) {
-        BiomeModifications.addSpawn(predicate, type.getSpawnGroup(), type, weight, minGroupSize, maxGroupSize);
-    }
+
 
     @Override
     public void onInitialize() {
         PhasmoObjects.init();
         PhasmoBrains.init();
-        registerEntitySpawn(PhasmoObjects.REVENANT, BiomeSelectors.foundInOverworld().and(context -> !context.getBiome().getSpawnSettings().getSpawnEntries(PhasmoObjects.REVENANT.getSpawnGroup()).isEmpty()), 10, 1, 1);
-        SpawnRestrictionAccessor.callRegister(PhasmoObjects.REVENANT, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, RevenantEntity::canSpawnInDark);
+        PhasmoEntities.init();
 
 
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {

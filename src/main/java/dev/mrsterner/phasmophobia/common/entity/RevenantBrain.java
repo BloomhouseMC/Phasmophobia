@@ -3,6 +3,7 @@ package dev.mrsterner.phasmophobia.common.entity;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
+import dev.mrsterner.phasmophobia.common.registry.PhasmoEntities;
 import dev.mrsterner.phasmophobia.common.registry.PhasmoObjects;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -69,9 +70,9 @@ public class RevenantBrain {
     }
 
     private static void targetEnemy(RevenantEntity revenant, LivingEntity target) {
-        if (target.getType() != PhasmoObjects.REVENANT) {
+        if (target.getType() != PhasmoEntities.REVENANT) {
             if (Sensor.testAttackableTargetPredicate(revenant, target)) {
-                if (target.getType() != PhasmoObjects.REVENANT) {
+                if (target.getType() != PhasmoEntities.REVENANT) {
                     if (!LookTargetUtil.isNewTargetTooFar(revenant, target, 4.0D)) {
                         setAttackTarget(revenant, target);
                     }

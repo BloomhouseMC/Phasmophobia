@@ -23,21 +23,8 @@ public class RevenantSpecificSensor extends Sensor<LivingEntity> {
     public RevenantSpecificSensor() {
     }
 
-
-    private boolean canHunt(LivingEntity revenant, LivingEntity target) {
-        return !revenant.getBrain().hasMemoryModule(MemoryModuleType.HAS_HUNTING_COOLDOWN);
-    }
-
-    private boolean isAlwaysHostileTo(LivingEntity entity) {
-        return true;
-    }
-
-    private boolean isInRange(LivingEntity axolotl, LivingEntity target) {
-        return target.squaredDistanceTo(axolotl) <= 64.0D;
-    }
-
     public Set<MemoryModuleType<?>> getOutputMemoryModules() {
-        return ImmutableSet.of(/*MemoryModuleType.VISIBLE_MOBS,*/ MemoryModuleType.NEAREST_REPELLENT/*, new MemoryModuleType[0]*/);
+        return ImmutableSet.of(MemoryModuleType.NEAREST_REPELLENT);
     }
 
     @Override
@@ -61,29 +48,5 @@ public class RevenantSpecificSensor extends Sensor<LivingEntity> {
                 return false;
             });
     }
-
-    /*
-    BlockEntity blockEntity = world.getBlockEntity(crucifixPos);
-                if (blockEntity instanceof PlaceableBlockEntity placeableBlockEntity) {
-                    for (int i = 0; i < placeableBlockEntity.size(); i++) {
-                        Item item = placeableBlockEntity.getStack(i).getItem();
-                        if(item instanceof CrucifixItem crucifixItem){
-                            radius = crucifixItem.radius;
-                            System.out.println(radius);
-                        }
-                    }
-                }
-     */
-
-
-    protected boolean matches(LivingEntity entity, LivingEntity target) {
-        if (!Sensor.testAttackableTargetPredicate(entity, target) || !this.isAlwaysHostileTo(target) && !this.canHunt(entity, target)) {
-            return false;
-        } else {
-            return this.isInRange(entity, target) && target.isInsideWaterOrBubbleColumn();
-        }
-    }
-
-
 }
 
