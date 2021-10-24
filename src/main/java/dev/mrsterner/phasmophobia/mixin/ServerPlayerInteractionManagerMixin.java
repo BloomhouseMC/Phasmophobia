@@ -1,5 +1,6 @@
 package dev.mrsterner.phasmophobia.mixin;
 
+import dev.mrsterner.phasmophobia.common.registry.PhasmoTags;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -27,7 +28,7 @@ public class ServerPlayerInteractionManagerMixin {
 
     @ModifyVariable(method = "interactBlock", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/server/network/ServerPlayerEntity;shouldCancelInteraction()Z"))
     private boolean allowSneakRightClick(boolean original) {
-        if (interactPlayer.isSneaking() && !interactPlayer.getMainHandStack().isEmpty()) {
+        if (interactPlayer.isSneaking() && PhasmoTags.PLACEABLES.contains(interactPlayer.getMainHandStack().getItem())) {
             return false;
         }
         return original;
