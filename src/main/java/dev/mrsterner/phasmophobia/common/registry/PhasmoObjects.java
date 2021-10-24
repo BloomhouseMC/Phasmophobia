@@ -82,7 +82,7 @@ public class PhasmoObjects {
         BLOCK_ENTITY_TYPES.keySet().forEach(blockEntityType -> Registry.register(Registry.BLOCK_ENTITY_TYPE, BLOCK_ENTITY_TYPES.get(blockEntityType), blockEntityType));
         ITEMS.keySet().forEach(item -> Registry.register(Registry.ITEM, ITEMS.get(item), item));
         ENTITY_TYPES.keySet().forEach(entityType -> Registry.register(Registry.ENTITY_TYPE, ENTITY_TYPES.get(entityType), entityType));
-        FabricDefaultAttributeRegistry.register(REVENANT, RevenantEntity.createMobAttributes());
+            FabricDefaultAttributeRegistry.register(REVENANT, RevenantEntity.createMobAttributes());
 
     }
 }
