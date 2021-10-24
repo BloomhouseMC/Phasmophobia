@@ -19,6 +19,35 @@ public class RevenantSpecificSensor extends Sensor<LivingEntity> {
     public RevenantSpecificSensor() {
     }
 
+
+    private boolean canHunt(LivingEntity revenant, LivingEntity target) {
+        return !revenant.getBrain().hasMemoryModule(MemoryModuleType.HAS_HUNTING_COOLDOWN);
+    }
+
+    private boolean isAlwaysHostileTo(LivingEntity entity) {
+        return true;
+    }
+
+    private boolean isInRange(LivingEntity axolotl, LivingEntity target) {
+        return target.squaredDistanceTo(axolotl) <= 64.0D;
+    }
+
+    public Set<MemoryModuleType<?>> getOutputMemoryModules() {
+        return ImmutableSet.of(/*MemoryModuleType.VISIBLE_MOBS,*/ MemoryModuleType.NEAREST_REPELLENT/*, new MemoryModuleType[0]*/);
+    }
+
+    @Override
+    protected void sense(ServerWorld world, LivingEntity entity) {
+        Brain<?> brain = entity.getBrain();
+        brain.remember(MemoryModuleType.NEAREST_REPELLENT, this.findNearestCrucifix(world, (RevenantEntity) entity));
+    }
+
+    private Optional<BlockPos> findNearestCrucifix(ServerWorld world, RevenantEntity revenant) {
+        return BlockPos.findClosest(revenant.getBlockPos(), 8, 4, (blockPos) ->
+            world.getBlockState(blockPos).isIn(PhasmoTags.REVENANT_REPELLENTS));
+    }
+
+
     protected boolean matches(LivingEntity entity, LivingEntity target) {
         if (!Sensor.testAttackableTargetPredicate(entity, target) || !this.isAlwaysHostileTo(target) && !this.canHunt(entity, target)) {
             return false;
@@ -27,44 +56,6 @@ public class RevenantSpecificSensor extends Sensor<LivingEntity> {
         }
     }
 
-    private boolean canHunt(LivingEntity axolotl, LivingEntity target) {
-        return !axolotl.getBrain().hasMemoryModule(MemoryModuleType.HAS_HUNTING_COOLDOWN);
-    }
 
-    private boolean isAlwaysHostileTo(LivingEntity axolotl) {
-        return true;
-    }
-
-    private boolean isInRange(LivingEntity axolotl, LivingEntity target) {
-        return target.squaredDistanceTo(axolotl) <= 64.0D;
-    }
-
-    protected MemoryModuleType<LivingEntity> getOutputMemoryModule() {
-        return MemoryModuleType.NEAREST_ATTACKABLE;
-    }
-    public Set<MemoryModuleType<?>> getOutputMemoryModules() {
-        return ImmutableSet.of(/*MemoryModuleType.VISIBLE_MOBS,*/ MemoryModuleType.NEAREST_REPELLENT/*, new MemoryModuleType[0]*/);
-    }
-
-    @Override
-    protected void sense(ServerWorld world, LivingEntity entity) {
-        System.out.println("sense");
-        Brain<?> brain = entity.getBrain();
-        brain.remember(MemoryModuleType.NEAREST_REPELLENT, this.findNearestCrucifix(world, (RevenantEntity) entity));
-    }
-    /*
-    protected void sense(ServerWorld serverWorld, RevenantEntity revenantEntity) {
-        Brain<?> brain = revenantEntity.getBrain();
-        brain.remember(MemoryModuleType.NEAREST_REPELLENT, this.findNearestCrucifix(serverWorld, revenantEntity));
-
-    }
-
-     */
-
-    private Optional<BlockPos> findNearestCrucifix(ServerWorld world, RevenantEntity revenant) {
-        System.out.println("find");
-        return BlockPos.findClosest(revenant.getBlockPos(), 8, 4, (blockPos) ->
-            world.getBlockState(blockPos).isIn(PhasmoTags.REVENANT_REPELLENTS));
-    }
 }
 
