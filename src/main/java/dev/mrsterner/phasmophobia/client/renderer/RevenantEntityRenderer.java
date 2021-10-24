@@ -9,6 +9,7 @@ import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 public class RevenantEntityRenderer extends GeoEntityRenderer<RevenantEntity> {
@@ -20,6 +21,12 @@ public class RevenantEntityRenderer extends GeoEntityRenderer<RevenantEntity> {
     @Override
     public RenderLayer getRenderType(RevenantEntity animatable, float partialTicks, MatrixStack stack, @Nullable VertexConsumerProvider renderTypeBuffer, @Nullable VertexConsumer vertexBuilder, int packedLightIn, Identifier textureLocation) {
         return RenderLayer.getEntityTranslucent(this.getTextureLocation(animatable));
+    }
+
+    public static class RevenantEyesRenderer extends GeoEntityRenderer<RevenantEntity> {
+        protected RevenantEyesRenderer(EntityRendererFactory.Context ctx, AnimatedGeoModel<RevenantEntity> modelProvider) {
+            super(ctx, modelProvider);
+        }
     }
 
 }

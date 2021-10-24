@@ -3,11 +3,13 @@ package dev.mrsterner.phasmophobia.common.entity;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
+import dev.mrsterner.phasmophobia.common.registry.PhasmoObjects;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.Activity;
 import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
+import net.minecraft.entity.ai.brain.Schedule;
 import net.minecraft.entity.ai.brain.sensor.Sensor;
 import net.minecraft.entity.ai.brain.task.*;
 import net.minecraft.entity.mob.AbstractPiglinEntity;
@@ -21,12 +23,15 @@ import net.minecraft.util.math.intprovider.UniformIntProvider;
 
 import java.util.Optional;
 import java.util.Random;
+import java.util.function.Function;
 
 import static net.minecraft.entity.ai.brain.MemoryModuleType.NEAREST_ATTACKABLE;
 
 public class RevenantBrain {
     private static final UniformIntProvider AVOID_MEMORY_DURATION = TimeHelper.betweenSeconds(5, 20);
     private static final UniformIntProvider GO_TO_NEMESIS_MEMORY_DURATION = TimeHelper.betweenSeconds(5, 7);
+    private Function getPreferredTarget;
+
     public RevenantBrain() {
     }
 
@@ -36,6 +41,7 @@ public class RevenantBrain {
         addFightTasks(brain);
         addCoreActivities(brain);
         addIdleActivities(brain);
+        addFightActivities(brain);
         brain.setCoreActivities(ImmutableSet.of(Activity.CORE));
         brain.setDefaultActivity(Activity.IDLE);
         brain.resetPossibleActivities();
@@ -49,10 +55,13 @@ public class RevenantBrain {
 
     }
 
-    private static void addCoreActivities(Brain<RevenantEntity> piglin) {
-        piglin.setTaskList(Activity.CORE, 0, ImmutableList.of(
+    private static void addCoreActivities(Brain<RevenantEntity> revenantBrain) {
+        revenantBrain.setTaskList(Activity.CORE, 0, ImmutableList.of(
+            //new WalkTask(2.0F),
             new LookAroundTask(45, 90),
             new WanderAroundTask(),
+            new AttackTask<>(10,10),
+            new MeleeAttackTask(0),
             new DefeatTargetTask(300, RevenantBrain::isHuntingTarget),
             new ForgetAngryAtTargetTask<>()
             ));
@@ -66,12 +75,12 @@ public class RevenantBrain {
         }
     }
 
-    private static void addIdleActivities(Brain<RevenantEntity> revenant) {
-        revenant.setTaskList(Activity.IDLE, 10, ImmutableList.of(
-            new MeleeAttackTask(0),
-            new UpdateAttackTargetTask(RevenantBrain::getPreferredTarget),
-            new ConditionalTask(RevenantEntity::canHunt,
-                new HuntHoglinTask())
+    private static void addIdleActivities(Brain<RevenantEntity> revenantBrain) {
+        revenantBrain.setTaskList(Activity.IDLE, 0, ImmutableList.of(
+            new MeleeAttackTask(0)//,
+           // new UpdateAttackTargetTask(LookTargetUtil.getEntity(revenant, MemoryModuleType.ANGRY_AT)),
+           // new ConditionalTask(RevenantEntity::canHunt,
+           //     new HuntHoglinTask())
         ));
     }
 
@@ -83,14 +92,19 @@ public class RevenantBrain {
     }
 
     private static void addIdleTasks(Brain<RevenantEntity> brain) {
-        brain.setTaskList(Activity.IDLE, 10, ImmutableList.of(new PacifyTask(
-            MemoryModuleType.NEAREST_REPELLENT, 200),
+        brain.setTaskList(Activity.IDLE, 10, ImmutableList.of(
+            new PacifyTask(MemoryModuleType.NEAREST_REPELLENT, 200),
             GoToRememberedPositionTask.toBlock(MemoryModuleType.NEAREST_REPELLENT, 1.0F, 8, true), makeRandomWalkTask()));
     }
 
     private static void addFightTasks(Brain<RevenantEntity> brain) {
         brain.setTaskList(Activity.FIGHT, 0, ImmutableList.of(
             new PacifyTask(MemoryModuleType.NEAREST_REPELLENT, 200),
+            new MeleeAttackTask(10)), MemoryModuleType.ATTACK_TARGET);
+    }
+
+    private static void addFightActivities(Brain<RevenantEntity> brain) {
+        brain.setTaskList(Activity.FIGHT, 0, ImmutableList.of(
             new MeleeAttackTask(10)), MemoryModuleType.ATTACK_TARGET);
     }
 
@@ -109,6 +123,21 @@ public class RevenantBrain {
         revenant.setAttacking(brain.hasMemoryModule(MemoryModuleType.ATTACK_TARGET));
     }
 
+    private static void setAttackTarget(RevenantEntity revenant, LivingEntity target) {
+        Brain<RevenantEntity> brain = revenant.getBrain();
+        brain.forget(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
+        brain.remember(MemoryModuleType.ATTACK_TARGET, target, 200L);
+    }
+
+    private static void targetEnemy(RevenantEntity revenant, LivingEntity target) {
+        if (!revenant.getBrain().hasActivity(Activity.AVOID) || target.getType() != PhasmoObjects.REVENANT) {
+            if (Sensor.testAttackableTargetPredicate(revenant, target)) {
+                if (!LookTargetUtil.isNewTargetTooFar(revenant, target, 4.0D)) {
+                    setAttackTarget(revenant, target);
+                }
+            }
+        }
+    }
 
 
     private static void avoid(RevenantEntity revenant, LivingEntity target) {

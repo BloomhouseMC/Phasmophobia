@@ -18,9 +18,9 @@ public class RevenantEyesFeatureRenderer extends GeoLayerRenderer<RevenantEntity
     private static final RenderLayer SKIN_2 = RenderLayer.getEyes(new Identifier(Phasmophobia.MODID,"textures/entity/revenant_eyes_2.png"));
     private final IGeoRenderer<RevenantEntity> renderer;
 
-    public RevenantEyesFeatureRenderer(IGeoRenderer<RevenantEntity> entityRendererIn, RevenantEyesRenderer model) {
+    public RevenantEyesFeatureRenderer(RevenantEntityRenderer entityRendererIn, RevenantEntityRenderer.RevenantEyesRenderer revenantEyesRenderer) {
         super(entityRendererIn);
-        this.renderer = model;
+        this.renderer = revenantEyesRenderer;
     }
 
     @Override

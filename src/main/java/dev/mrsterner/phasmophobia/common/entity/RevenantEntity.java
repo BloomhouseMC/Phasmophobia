@@ -2,7 +2,11 @@ package dev.mrsterner.phasmophobia.common.entity;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Dynamic;
+import dev.mrsterner.phasmophobia.common.block.entity.PlaceableBlockEntity;
+import dev.mrsterner.phasmophobia.common.item.CrucifixItem;
 import dev.mrsterner.phasmophobia.common.registry.PhasmoBrains;
+import dev.mrsterner.phasmophobia.common.world.PhasmoWorldState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
@@ -16,12 +20,13 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.*;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.DebugInfoSender;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
+import net.minecraft.util.Pair;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -31,37 +36,15 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import java.util.Random;
+
 public class RevenantEntity extends AbstractGhostEntity implements IAnimatable {
     AnimationFactory factory = new AnimationFactory(this);
     private static final TrackedData<Integer> ANGER_TIME = DataTracker.registerData(RevenantEntity.class, TrackedDataHandlerRegistry.INTEGER);
     public static final TrackedData<Integer> STATE = DataTracker.registerData(RevenantEntity.class, TrackedDataHandlerRegistry.INTEGER);
     public static final TrackedData<Boolean> HAS_TARGET = DataTracker.registerData(RevenantEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    protected static final ImmutableList<SensorType<? extends Sensor<? super RevenantEntity>>> SENSOR_TYPES = ImmutableList.of(
-        SensorType.NEAREST_LIVING_ENTITIES,
-        SensorType.NEAREST_PLAYERS,
-        SensorType.NEAREST_ITEMS,
-        SensorType.HURT_BY,
-        PhasmoBrains.REVENANT_SPECIFIC_SENSOR);
-    protected static final ImmutableList<MemoryModuleType<?>> MEMORY_MODULE_TYPES = ImmutableList.of(
-        MemoryModuleType.LOOK_TARGET,
-        MemoryModuleType.MOBS,
-        MemoryModuleType.VISIBLE_MOBS,
-        MemoryModuleType.NEAREST_VISIBLE_PLAYER,
-        MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER,
-        MemoryModuleType.HURT_BY,
-        MemoryModuleType.HURT_BY_ENTITY,
-        MemoryModuleType.WALK_TARGET,
-        MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE,
-        MemoryModuleType.ATTACK_TARGET,
-        MemoryModuleType.ATTACK_COOLING_DOWN,
-        MemoryModuleType.INTERACTION_TARGET,
-        MemoryModuleType.PATH,
-        MemoryModuleType.ANGRY_AT,
-        MemoryModuleType.LOOK_TARGET,
-        MemoryModuleType.HURT_BY_ENTITY,
-        MemoryModuleType.NEAREST_ATTACKABLE,
-        MemoryModuleType.HAS_HUNTING_COOLDOWN,
-        MemoryModuleType.NEAREST_VISIBLE_NEMESIS);
+    protected static final ImmutableList<SensorType<? extends Sensor<? super RevenantEntity>>> SENSORS;
+    protected static final ImmutableList<MemoryModuleType<?>> MEMORY_MODULES;
 
     public RevenantEntity(EntityType<? extends AbstractGhostEntity> entityType, World world) {
         super(entityType, world);
@@ -71,6 +54,15 @@ public class RevenantEntity extends AbstractGhostEntity implements IAnimatable {
     @Override
     public boolean canHurt() {
         return super.canHurt();
+    }
+
+
+
+    public static boolean canSpawnInDark(EntityType<? extends HostileEntity> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
+        return world.getDifficulty() != Difficulty.PEACEFUL &&
+            isSpawnDark(world, pos, random) &&
+            canMobSpawn(type, world, spawnReason, pos, random) &&
+            locate(world, pos) == null;
     }
 
     @Nullable
@@ -105,7 +97,7 @@ public class RevenantEntity extends AbstractGhostEntity implements IAnimatable {
     public static DefaultAttributeContainer.Builder createMobAttributes() {
         return LivingEntity.createLivingAttributes()
                            .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 20.0D)
-                           .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.15D)
+                           .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3D)
                            .add(EntityAttributes.GENERIC_MAX_HEALTH, Double.MAX_VALUE)
                            .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, Double.MAX_VALUE)
                            .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D)
@@ -120,7 +112,7 @@ public class RevenantEntity extends AbstractGhostEntity implements IAnimatable {
     }
     @Override
     protected Brain.Profile<RevenantEntity> createBrainProfile() {
-        return Brain.createProfile(MEMORY_MODULE_TYPES, SENSOR_TYPES);
+        return Brain.createProfile(MEMORY_MODULES, SENSORS);
     }
     @Override
     public Brain<RevenantEntity> getBrain() {
@@ -149,7 +141,29 @@ public class RevenantEntity extends AbstractGhostEntity implements IAnimatable {
         return false;
     }
 
-
+    static {
+        SENSORS = ImmutableList.of(
+            SensorType.NEAREST_LIVING_ENTITIES,
+            SensorType.NEAREST_PLAYERS,
+            SensorType.NEAREST_ITEMS,
+            SensorType.HURT_BY,
+            PhasmoBrains.REVENANT_SPECIFIC_SENSOR);
+        MEMORY_MODULES = ImmutableList.of(
+            MemoryModuleType.LOOK_TARGET,
+            MemoryModuleType.MOBS,
+            MemoryModuleType.VISIBLE_MOBS,
+            MemoryModuleType.NEAREST_VISIBLE_PLAYER,
+            MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER,
+            MemoryModuleType.HURT_BY,
+            MemoryModuleType.HURT_BY_ENTITY,
+            MemoryModuleType.WALK_TARGET,
+            MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE,
+            MemoryModuleType.ATTACK_TARGET,
+            MemoryModuleType.ATTACK_COOLING_DOWN,
+            MemoryModuleType.INTERACTION_TARGET,
+            MemoryModuleType.PATH,
+            MemoryModuleType.ANGRY_AT);
+    }
 
     private <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
         if(event.getLimbSwingAmount() > 0.01F){
@@ -204,5 +218,29 @@ public class RevenantEntity extends AbstractGhostEntity implements IAnimatable {
     @Override
     public boolean canHaveStatusEffect(StatusEffectInstance effect) {
         return false;
+    }
+    private static Pair<BlockPos, Integer> locate(ServerWorldAccess world, BlockPos pos) {
+        PhasmoWorldState worldState = PhasmoWorldState.get(world.toServerWorld());
+        for (Long longPos : worldState.crucifix) {
+            BlockPos crucifixPos = BlockPos.fromLong(longPos);
+            double distance = Math.sqrt(crucifixPos.getSquaredDistance(pos));
+            if (distance <= Byte.MAX_VALUE) {
+                int radius = -1;
+                BlockEntity blockEntity = world.getBlockEntity(crucifixPos);
+                if (blockEntity instanceof PlaceableBlockEntity placeableBlockEntity) {
+                    for (int i = 0; i < placeableBlockEntity.size(); i++) {
+                        Item item = placeableBlockEntity.getStack(i).getItem();
+                        if(item instanceof CrucifixItem crucifixItem){
+                            radius = crucifixItem.radius;
+                            System.out.println(radius);
+                        }
+                    }
+                }
+                if (distance <= radius) {
+                    return new Pair<>(crucifixPos, radius);
+                }
+            }
+        }
+        return null;
     }
 }

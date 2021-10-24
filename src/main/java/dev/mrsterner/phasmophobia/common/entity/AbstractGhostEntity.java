@@ -2,6 +2,7 @@ package dev.mrsterner.phasmophobia.common.entity;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.NavigationConditions;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
 import net.minecraft.entity.ai.pathing.MobNavigation;
@@ -9,15 +10,19 @@ import net.minecraft.entity.ai.pathing.PathNodeType;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.DebugInfoSender;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Random;
 
 public class AbstractGhostEntity extends HostileEntity {
     protected int timeInOverworld;
 
     public AbstractGhostEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
-        this.setCanPickUpLoot(true);
         this.setCanPathThroughDoors();
         this.setPathfindingPenalty(PathNodeType.DANGER_FIRE, 16.0F);
         this.setPathfindingPenalty(PathNodeType.DAMAGE_FIRE, -1.0F);
