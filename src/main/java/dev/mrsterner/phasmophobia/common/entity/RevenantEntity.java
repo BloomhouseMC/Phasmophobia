@@ -41,7 +41,7 @@ import java.util.Random;
 public class RevenantEntity extends AbstractGhostEntity implements IAnimatable {
     AnimationFactory factory = new AnimationFactory(this);
     private static final TrackedData<Integer> ANGER_TIME = DataTracker.registerData(RevenantEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    public static final TrackedData<Integer> STATE = DataTracker.registerData(RevenantEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    public static final TrackedData<Boolean> ATTACKING = DataTracker.registerData(RevenantEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     public static final TrackedData<Boolean> HAS_TARGET = DataTracker.registerData(RevenantEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     protected static final ImmutableList<SensorType<? extends Sensor<? super RevenantEntity>>> SENSORS;
     protected static final ImmutableList<MemoryModuleType<?>> MEMORY_MODULES;
@@ -102,9 +102,7 @@ public class RevenantEntity extends AbstractGhostEntity implements IAnimatable {
                            .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, Double.MAX_VALUE)
                            .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D)
                            .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, Double.MAX_VALUE);
-
     }
-
 
     @Override
     protected Brain<?> deserializeBrain(Dynamic<?> dynamic) {
@@ -128,12 +126,6 @@ public class RevenantEntity extends AbstractGhostEntity implements IAnimatable {
         RevenantBrain.refreshActivities(this);
         this.world.getProfiler().pop();
         super.mobTick();
-    }
-
-
-    @Override
-    protected int computeFallDamage(float fallDistance, float damageMultiplier) {
-        return 0;
     }
 
     @Override
@@ -165,7 +157,15 @@ public class RevenantEntity extends AbstractGhostEntity implements IAnimatable {
             MemoryModuleType.ANGRY_AT);
     }
 
-    private <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
+    @Override
+    protected void initDataTracker() {
+        super.initDataTracker();
+        this.dataTracker.startTracking(ANGER_TIME, 0);
+        this.dataTracker.startTracking(ATTACKING, false);
+        this.dataTracker.startTracking(HAS_TARGET, false);
+    }
+
+    private <E extends IAnimatable> PlayState basicMovement(AnimationEvent<E> event) {
         if(event.getLimbSwingAmount() > 0.01F){
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.revenant.move", true));
         }else{
@@ -173,28 +173,23 @@ public class RevenantEntity extends AbstractGhostEntity implements IAnimatable {
         }
         return PlayState.CONTINUE;
     }
-    private <E extends IAnimatable> PlayState predicate3(AnimationEvent<E> event) {
-        if(this.dataTracker.get(STATE) == 1){
+    private <E extends IAnimatable> PlayState attackingMovement(AnimationEvent<E> event) {
+        if(this.dataTracker.get(ATTACKING)){
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.revenant.attack", true));
             return PlayState.CONTINUE;
         }
         return PlayState.STOP;
     }
 
-
-
     @Override
-    protected void initDataTracker() {
-        super.initDataTracker();
-        this.dataTracker.startTracking(ANGER_TIME, 0);
-        this.dataTracker.startTracking(STATE, 0);
-        this.dataTracker.startTracking(HAS_TARGET, false);
+    public void registerControllers(AnimationData data) {
+        data.addAnimationController(new AnimationController<>(this, "Attacking", 0, this::attackingMovement));
+        data.addAnimationController(new AnimationController<>(this, "BasicMovement", 10, this::basicMovement));
     }
 
     @Override
-    public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "controller3", 0, this::predicate3));
-        data.addAnimationController(new AnimationController<>(this, "controller2", 10, this::predicate2));
+    public AnimationFactory getFactory() {
+        return this.factory;
     }
 
     @Override
@@ -208,17 +203,11 @@ public class RevenantEntity extends AbstractGhostEntity implements IAnimatable {
         return new RevenantNavigation(this, world);
     }
 
-
-
-    @Override
-    public AnimationFactory getFactory() {
-        return this.factory;
-    }
-
     @Override
     public boolean canHaveStatusEffect(StatusEffectInstance effect) {
         return false;
     }
+
     private static Pair<BlockPos, Integer> locate(ServerWorldAccess world, BlockPos pos) {
         PhasmoWorldState worldState = PhasmoWorldState.get(world.toServerWorld());
         for (Long longPos : worldState.crucifix) {
