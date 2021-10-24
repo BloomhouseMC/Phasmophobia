@@ -2,8 +2,9 @@ pluginManagement {
     repositories {
         mavenCentral()
         maven { name 'Fabric'; url 'https://maven.fabricmc.net/' }
+        maven { name 'Cotton'; url 'https://server.bbkr.space/artifactory/libs-release' }
         gradlePluginPortal()
     }
 }
 
-rootProject.name = 'fabric-example-mod'
+rootProject.name = 'Phasmophobia'
