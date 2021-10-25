@@ -4,8 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import dev.mrsterner.phasmophobia.common.registry.PhasmoEntities;
-import dev.mrsterner.phasmophobia.common.registry.PhasmoObjects;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.Activity;
 import net.minecraft.entity.ai.brain.Brain;
@@ -100,7 +98,7 @@ public class RevenantBrain {
     }
 
     private static boolean isHuntingTarget(LivingEntity revenant, LivingEntity target) {
-        if (target.getType() != EntityType.HOGLIN) {
+        if (target.getType() != PhasmoEntities.REVENANT) {
             return false;
         } else {
             return (new Random(revenant.world.getTime())).nextFloat() < 0.1F;
