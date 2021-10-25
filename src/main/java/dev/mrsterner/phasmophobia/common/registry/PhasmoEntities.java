@@ -41,8 +41,10 @@ public class PhasmoEntities {
 
     public static void init() {
         ENTITY_TYPES.keySet().forEach(entityType -> Registry.register(Registry.ENTITY_TYPE, ENTITY_TYPES.get(entityType), entityType));
-        FabricDefaultAttributeRegistry.register(REVENANT, BaseGhostEntity.createMobAttributes());
-        registerEntitySpawn(REVENANT, BiomeSelectors.foundInOverworld().and(context -> !context.getBiome().getSpawnSettings().getSpawnEntries(REVENANT.getSpawnGroup()).isEmpty()), 10, 1, 1);
-        SpawnRestrictionAccessor.callRegister(REVENANT, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, RevenantEntity::canSpawnInDark);
+        for(EntityType entityType : PhasmoEntities.ENTITY_TYPES.keySet()){
+            FabricDefaultAttributeRegistry.register(entityType, BaseGhostEntity.createMobAttributes());
+            registerEntitySpawn(entityType, BiomeSelectors.foundInOverworld().and(context -> !context.getBiome().getSpawnSettings().getSpawnEntries(entityType.getSpawnGroup()).isEmpty()), 10, 1, 1);
+            SpawnRestrictionAccessor.callRegister(entityType, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, RevenantEntity::canSpawnInDark);
+        }
     }
 }
